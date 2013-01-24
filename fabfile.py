@@ -49,14 +49,13 @@ def bump_version():
 
 def check_repo():
     """Check if repository is ready for deployment."""
-    ahead = capture('git status | grep -e "branch is ahead"')
-    if not ahead:
+    if not capture('git status | grep -e "branch is ahead"'):
         abort('Nothing to deploy.')
-    staged = capture('git status -s | grep -e "^M"')
-    if staged:
+
+    if capture('git status -s | grep -e "^M"'):
         abort('Staged modified files present in repository.')
-    modified = capture('git status -s | grep "M {0}"'.format(version_file))
-    if modified:
+
+    if capture('git status -s | grep "M {0}"'.format(version_file)):
         abort('File with version {0} is modified, '
               'but not commited.'.format(version_file))
 
@@ -73,16 +72,17 @@ def deploy():
     # check repository status
     check_repo()
 
-    # push to Heroku
-    local('git push heroku {0}:master'.format(branch))
-    local('heroku ps:scale web=1')
-
     # push to Github
     tag = 'v' + bump_version()
     local('git add ' + version_file)
     local('git commit --amend --no-edit')
     local('git tag {0}'.format(tag))
     local('git push --tags origin {0}:master'.format(branch))
+
+    # push to Heroku
+    local('git push heroku {0}:master'.format(branch))
+    if 'web.1: up' not in capture('heroku ps'):
+        local('heroku ps:scale web=1')
 
 
 def ps():
