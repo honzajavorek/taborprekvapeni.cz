@@ -14,6 +14,15 @@ if os.getcwd() != base_path:
     abort('Not in project root. Please, cd to {0}.'.format(base_path))
 
 
+__all__ = ('deploy', 'ps', 'logs')
+
+
+def capture(cmd):
+    with settings(hide('warnings', 'running', 'stdout', 'stderr'),
+                  warn_only=True):
+        return local(cmd, capture=True)
+
+
 def bump_version():
     """Automatically bump version."""
     version_re = re.compile(r"version='([^']+)'")
@@ -28,7 +37,7 @@ def bump_version():
 
     major, minor, micro = map(int, version.split('.'))
     micro += 1
-    version = map(str, [major, minor, micro])
+    version = '.'.join(map(str, [major, minor, micro]))
 
     puts('Bumping version to {0}.'.format(version))
     code = version_re.sub("version='{0}'".format(version), code)
@@ -40,11 +49,6 @@ def bump_version():
 
 def check_repo():
     """Check if repository is ready for deployment."""
-    def capture(cmd):
-        with settings(hide('warnings', 'running', 'stdout', 'stderr'),
-                      warn_only=True):
-            return local(cmd, capture=True)
-
     ahead = capture('git status | grep -e "branch is ahead"')
     if not ahead:
         abort('Nothing to deploy.')
@@ -60,7 +64,7 @@ def check_repo():
 def deploy():
     """Deploy site to Heroku."""
     # parse active branch
-    branches = local('git branch --no-color 2> /dev/null', capture=True)
+    branches = capture('git branch --no-color 2> /dev/null')
     match = re.search(r'\* ([\w\-_]*)', branches)
     if not match:
         abort('Unable to detect git branch.')
@@ -84,11 +88,6 @@ def deploy():
 def ps():
     """Show remote process list."""
     local('heroku ps')
-
-
-def open():
-    """Open site in browser."""
-    local('heroku open')
 
 
 def logs():
