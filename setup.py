@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='taborprekvapeni',
-    version='0.0.3',
+    version='0.0.4',
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
@@ -14,5 +14,8 @@ setup(
         'gevent==0.13.8',
         'flask==0.9',
         'flask-markdown==0.3',
+        'requests==1.1.0',
+        'lxml>=3.1.beta1',
+        'redis==2.7.2',
     ],
 )

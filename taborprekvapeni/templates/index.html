@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="cs">
-    <head>
-        <meta charset="utf-8">
-        <title>Tábor</title>
-    </head>
-    <body>
-        <div class="doc">
-        {% filter markdown %}
-# Tralala
+{% extends 'base.html' %}
+{% block content %}
+{% filter markdown %}
 
-tralalala
-        {% endfilter %}
-    </div>
-    </body>
-</html>
+Tábor se koná {{ info.senior.starts_at.day }}. {{ info.senior.starts_at.month }}. {{ info.senior.starts_at.year }} a stojí {{ info.senior.price }} Kč.
+
+{% endfilter %}
+{% endblock %}
