@@ -11,7 +11,7 @@ MARKDOWN = {
 }
 
 LOGGING = {
-    'format': '[%(asctime)s: %(levelname)s] %(message)s',
+    'format': '[%(levelname)s] %(message)s',
     'level': logging.DEBUG,
 }
 
