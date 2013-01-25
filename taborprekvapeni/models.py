@@ -47,6 +47,10 @@ class BasicInfo(object):
             url = urllib.unquote(url)
         return url
 
+    def _create_url(self, filename, id):
+        return ('http://www.tabory.cz/{0}?'
+                'zajezd_id={1}').format(filename, camp_id)
+
     def _parse_age(self, cell):
         # get two clusters of numbers
         return map(int, re.findall(r'\d+', cell.text))
@@ -76,6 +80,9 @@ class BasicInfo(object):
         texts = cell.xpath('.//text()')
         return ' '.join(texts).strip()
 
+    def _parse_id(self, url):
+        return int(re.search(r'id=(\d+)').group(1))
+
     def _parse(self, contents):
         dom = html.fromstring(contents)
         rows = []
@@ -86,14 +93,24 @@ class BasicInfo(object):
         for tr in dom.xpath(query):
             starts_at, ends_at = self._parse_date(tr[0])
             age_from, age_to = self._parse_age(tr[1])
+
+            book_url = self._parse_url(tr[6])
+            camp_id = self._parse_id(book_url)
+
+            poster_url = self._create_url('upoutavka.php', camp_id)
+            departure_url = self._create_url('odjezdy.php', camp_id)
+
             rows.append({
+                'id': camp_id,
                 'age_from': age_from,
                 'age_to': age_to,
                 'starts_at': starts_at,
                 'ends_at': ends_at,
                 'topic': self._parse_topic(tr[4]),
                 'fb_url': self._parse_url(tr[3]),
-                'book_url': self._parse_url(tr[6]),
+                'book_url': book_url,
+                'poster_url': poster_url,
+                'departure_url': departure_url,
                 'price': self._parse_price(tr[5]),
             })
 

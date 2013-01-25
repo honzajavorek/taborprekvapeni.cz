@@ -7,8 +7,11 @@
         <title>{% block title %}Tábor plný překvapení - letní dětský tábor{% endblock %}</title>
     </head>
     <body>
-        <h1>Tábor plný překvapení</h1>
-        <p><strong>Letní dětský tábor v Jižních Čechách s odjezdem z Prahy.</strong></p>
+        <p>
+            <strong>Tábor plný překvapení</strong>
+            &ndash;
+            Letní dětský tábor v Jižních Čechách s odjezdem z Prahy.
+        </p>
 
         <hr>
 
@@ -16,6 +19,20 @@
 
         <hr>
 
+        <h3>Menu</h3>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Ahoj!</a></li>
+            <li><a href="{{ url_for('info') }}">Informace</a></li>
+            <li><a href="{{ url_for('team') }}">Tým vedoucích</a></li>
+            <li><a href="{{ url_for('history') }}">Historie a fotky</a></li>
+            <li><a href="{{ url_for('contact') }}">Kontakt a přihláška</a></li>
+        </ul>
 
+        <hr>
+
+        <p>
+            <strong>Tábor plný překvapení</strong> je značka, pod kterou od roku 2004 vystupuje parta vedoucích v čele s Pavlem Gálem.
+            Provozovatelem tábora je <a href="http://www.tabory.cz">CK Topinka</a>.
+        </p>
     </body>
 </html>

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+{% filter markdown %}
+
+
+# Přihláška
+
+- ## Uličníci od {{ info.senior.age_from }} let
+  <a href="{{ info.senior.book_url }}">Náš uličník jede s vámi!</a>
+
+- ## Caparti do {{ info.junior.age_to }} let
+  <a href="{{ info.junior.book_url }}">Náš capart jede s vámi!</a>
+
+# Kontakty
+
+- ## Hlavní vedoucí
+  Pavel Gál<br>
+  {{ 'p.gal@seznam.cz'|email }}
+
+- ## Provozovatel
+  Cestovní kancelář Topinka, s.r.o.<br>
+  IČ: [27152251](http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_rzp.cgi?ico=27152251&jazyk=cz&xml=1&rozsah=0)<br>
+  <a href="http://www.tabory.cz/kontakty.html">Objednávky, reklamace, oficiální sídlo</a>
+
+- ## Adresa tábora
+  Letní tábor **{{ info.senior.topic }} / {{ info.junior.topic }}**<br>
+  RS Spolana Varvažov<br>
+  397 01 Písek<br>
+  GPS: <code>49°25'58.253"N, 14°8'1.301"E</code><br>
+  <a href="http://mapy.cz/s/69xt">Mapa</a>
+
+{% endfilter %}
+{% endblock %}
