@@ -12,7 +12,7 @@ except ImportError:
 from taborprekvapeni import app, redis
 
 
-def cache(key, fn):
+def cache(key, fn, exp=None):
     """Cache helper. Uses Redis.
 
     In case data are found in cache under *key*, they are
@@ -49,10 +49,11 @@ def cache(key, fn):
         return pickle.loads(result) if result else None
 
     # update cache
-    exp = app.config['HTTP_CACHE_EXPIRATION']
-    pickled = pickle.dumps(result)
+    if result:
+        exp = exp or app.config['CACHE_EXPIRATION']
+        pickled = pickle.dumps(result)
 
-    redis.setex(key, exp, pickled)
-    redis.set(key_eternal, pickled)
+        redis.setex(key, exp, pickled)
+        redis.set(key_eternal, pickled)
 
     return result

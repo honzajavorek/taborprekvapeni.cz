@@ -1,3 +1,5 @@
+{%- import 'macros.html' as macros with context -%}
+
 <!DOCTYPE html>
 <html lang="cs">
     <head>
@@ -8,26 +10,25 @@
     </head>
     <body>
         <p>
-            <strong>Tábor plný překvapení</strong>
+            <a href="{{ url_for('index') }}"><strong>Tábor plný překvapení</strong></a>
             &ndash;
             Letní dětský tábor v Jižních Čechách s odjezdem z Prahy.
         </p>
-
         <hr>
 
         {% block content %}{% endblock %}
-
         <hr>
 
-        <h3>Menu</h3>
-        <ul>
-            <li><a href="{{ url_for('index') }}">Ahoj!</a></li>
-            <li><a href="{{ url_for('info') }}">Informace</a></li>
-            <li><a href="{{ url_for('team') }}">Tým vedoucích</a></li>
-            <li><a href="{{ url_for('history') }}">Historie a fotky</a></li>
-            <li><a href="{{ url_for('contact') }}">Kontakt a přihláška</a></li>
-        </ul>
+        {% block submenu %}{% endblock %}
 
+        <h2>Menu</h2>
+        <ul>
+            {{ macros.menu_item(url_for('index'), 'Ahoj!') }}
+            {{ macros.menu_item(url_for('info'), 'Ročník ' + volume_year|string) }}
+            {{ macros.menu_item(url_for('team'), 'Tým vedoucích') }}
+            {{ macros.menu_item(url_for('history'), 'Historie a fotky') }}
+            {{ macros.menu_item(url_for('contact'), 'Kontakt a přihláška') }}
+        </ul>
         <hr>
 
         <p>

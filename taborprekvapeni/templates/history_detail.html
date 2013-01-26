@@ -1,0 +1,23 @@
+{% import 'macros.html' as macros with context %}
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<p><a href="{{ url_for('history') }}">Všechny ročníky</a></p>
+<h1>{{ text.title }}</h1>
+<p>{{ text.place }} {{ year }}</p>
+
+{{ macros.volume_image(year) }}
+{{ text|markdown }}
+
+{% endblock %}
+
+
+{% block submenu %}
+
+<h2>Všechny ročníky</h2>
+{{ macros.history_menu(all_texts)|safe }}
+<hr>
+
+{% endblock %}

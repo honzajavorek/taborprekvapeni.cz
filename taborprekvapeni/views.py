@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import times
-from flask import render_template
+from flask import render_template, abort
 
 from taborprekvapeni import app
-from taborprekvapeni.models import BasicInfo
+from taborprekvapeni.models import BasicInfo, HistoryText
 
 
 @app.context_processor
@@ -16,7 +16,8 @@ def inject_info():
 
     return {
         'info': info,
-        'volume': camp_date.year - 1997,
+        'volume_year': camp_date.year,
+        'volume_no': camp_date.year - 1997,
         'is_past': now.date() > camp_date,
     }
 
@@ -41,6 +42,15 @@ def team():
     return render_template('team.html')
 
 
+@app.route('/historie-fotky/<int:year>')
 @app.route('/historie-fotky')
-def history():
-    return render_template('history.html')
+def history(year=None):
+    all_texts = HistoryText.find_all()
+
+    if year:
+        text = HistoryText(year)
+        if not text:
+            abort(404)
+        return render_template('history_detail.html', year=year, text=text,
+                               all_texts=all_texts)
+    return render_template('history.html', all_texts=all_texts)

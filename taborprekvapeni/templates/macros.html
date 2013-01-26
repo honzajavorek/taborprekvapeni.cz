@@ -1,0 +1,48 @@
+
+
+{% macro menu_item(url, text, class='') -%}
+    {% if url == request.path or (url != '/' and request.path.startswith(url)) %}
+        {% set class = class + ' selected' %}
+        <li class="{{ class }}">
+            <strong>{{ text|safe }}</strong>
+        </li>
+    {% else %}
+        <li{% if class %} class="{{ class }}"{% endif %}>
+            <a href="{{ url }}">{{ text|safe }}</a>
+        </li>
+    {% endif %}
+{%- endmacro %}
+
+
+{% macro volume_image(year) -%}
+    {%- set year = year|string -%}
+    <img src="{{ url_for('static', filename='images/v' + year + '.jpg') }}" width="250" height="250">
+{%- endmacro %}
+
+
+{% macro volume_item(year, place, topic) -%}
+    {%- set year = year|string -%}
+
+    {%- set image = volume_image(year) -%}
+    {%- set topic = ('<em>' + topic + '</em>')|safe -%}
+    {%- set place = ('<small>' + place + ' ' + year + '</small>')|safe -%}
+    {%- set volume = 'v' + year -%}
+
+    {{- menu_item(
+        url_for('history', year=year),
+        [image, topic, place]|join(' '),
+    ) -}}
+{%- endmacro %}
+
+
+{% macro history_menu(texts) -%}
+    <ul>
+    {%- for text in texts -%}
+        {{- volume_item(
+            text.year,
+            text.place,
+            text.title
+        ) -}}
+    {%- endfor -%}
+    </ul>
+{%- endmacro %}
