@@ -140,7 +140,6 @@ class HistoryText(unicode):
         # find title
         lines = []
         for line in text.splitlines():
-            print line
             if line.startswith('# '):
                 title = line[2:]
             else:
