@@ -175,7 +175,7 @@ class PhotoAlbums(dict):
     _camp_re = re.compile(u't[áa]bor\D{0,3}(\d{4}|\d{2})', re.I)
 
     def __init__(self):
-        data = self._fetch()  # cache(self.__class__.__name__, self._fetch)
+        data = cache(self.__class__.__name__, self._fetch)
         self.update(data)
 
     def _is_camp_specific(self, album):
@@ -191,6 +191,9 @@ class PhotoAlbums(dict):
         if year < 100:
             return 1900 + year
         return year
+
+    def _parse_title(self, album):
+        return album.text
 
     def _parse_url(self, album):
         return album.get('href')
@@ -228,15 +231,24 @@ class PhotoAlbums(dict):
 
                 if is_camp and not is_secure:
                     yield {
+                        'title': self._parse_title(album),
                         'year': self._parse_year(album),
                         'url': self._parse_url(album),
                         'image_url': self._parse_image_url(album),
                         'count': self._parse_count(album),
                     }
 
+    def _regroup_sorted(self, all_albums):
+        key_year = lambda a: a['year']
+        key_title = lambda a: a['title'].lower()
+
+        # sort it by year (reverse = descendant by time)
+        all_albums = sorted(all_albums, key=key_year, reverse=True)
+
+        # regroup it by year, sort every album set by title
+        for year, albums in itertools.groupby(all_albums, key=key_year):
+            yield year, sorted(albums, key=key_title)
+
     def _fetch(self):
-        key = lambda a: a['year']
-        all_albums = sorted(self._generate_albums(self._url),
-                            key=key, reverse=True)
-        for year, albums in itertools.groupby(all_albums, key=key):
-            yield year, list(albums)
+        all_albums = self._generate_albums(self._url)
+        return list(self._regroup_sorted(all_albums))

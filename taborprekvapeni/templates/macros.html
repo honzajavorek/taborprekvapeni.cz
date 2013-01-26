@@ -57,7 +57,7 @@
     <ul>
     {% for album in albums %}
         <li>
-            <a href="{{ album.url }}">
+            <a href="{{ album.url }}" target="_blank">
                 {{ album_image(album) }}
                 {% if album.count == 1 %}
                     1 fotka
