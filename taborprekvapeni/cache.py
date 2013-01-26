@@ -3,6 +3,8 @@
 
 import logging
 from hashlib import sha1
+from flask import request
+from functools import wraps
 
 try:
     import cPickle as pickle
@@ -57,3 +59,16 @@ def cache(key, fn, exp=None):
         redis.set(key_eternal, pickled)
 
     return result
+
+
+def cached(exp=None):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not app.debug:
+                return cache(request.path, lambda: f(*args, **kwargs),
+                             exp=exp or app.config['CACHE_EXPIRATION'])
+            else:
+                return f(*args, **kwargs)
+        return decorated_function
+    return decorator

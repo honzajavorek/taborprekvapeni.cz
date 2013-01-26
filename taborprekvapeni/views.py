@@ -4,6 +4,7 @@ import times
 from flask import render_template, abort
 
 from taborprekvapeni import app
+from taborprekvapeni.cache import cached
 from taborprekvapeni.models import BasicInfo, HistoryText
 
 
@@ -23,27 +24,32 @@ def inject_info():
 
 
 @app.route('/')
+@cached()
 def index():
     return render_template('index.html')
 
 
 @app.route('/informace')
+@cached()
 def info():
     return render_template('info.html')
 
 
 @app.route('/kontakt-prihlaska')
+@cached()
 def contact():
     return render_template('contact.html')
 
 
 @app.route('/tym-vedoucich')
+@cached()
 def team():
     return render_template('team.html')
 
 
 @app.route('/historie-fotky/<int:year>')
 @app.route('/historie-fotky')
+@cached()
 def history(year=None):
     all_texts = HistoryText.find_all()
 
