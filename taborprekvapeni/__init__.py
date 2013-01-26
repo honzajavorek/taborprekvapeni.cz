@@ -9,7 +9,6 @@ from flask import Flask
 
 app = Flask(__name__)
 app.config.from_object('taborprekvapeni.config')
-
 logging.basicConfig(**app.config['LOGGING'])
 
 redis = Redis.from_url(app.config['REDIS_URL'])
