@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
+import os
 import re
 import urllib
 import datetime
 from lxml import html
 
-from taborprekvapeni import http
+from taborprekvapeni import app, http
 from taborprekvapeni.cache import cache
 
 
@@ -33,10 +34,9 @@ class BasicInfo(object):
     _data = {}
 
     def __init__(self):
-        self._data = cache(self.__class__.__name__, self._init)
-
-    def _init(self):
-        return self._parse(http.get(self._url))
+        def init():
+            return self._parse(http.get(self._url))
+        self._data = cache(self.__class__.__name__, init)
 
     def __getitem__(self, key):
         return self._data[key]
@@ -47,7 +47,7 @@ class BasicInfo(object):
             url = urllib.unquote(url)
         return url
 
-    def _create_url(self, filename, id):
+    def _create_url(self, filename, camp_id):
         return ('http://www.tabory.cz/{0}?'
                 'zajezd_id={1}').format(filename, camp_id)
 
@@ -81,7 +81,7 @@ class BasicInfo(object):
         return ' '.join(texts).strip()
 
     def _parse_id(self, url):
-        return int(re.search(r'id=(\d+)').group(1))
+        return int(re.search(r'id=(\d+)', url).group(1))
 
     def _parse(self, contents):
         dom = html.fromstring(contents)
@@ -117,3 +117,55 @@ class BasicInfo(object):
         if rows[0]['age_from'] < rows[1]['age_from']:
             return {'junior': rows[0], 'senior': rows[1]}
         return {'junior': rows[1], 'senior': rows[0]}
+
+
+class HistoryText(unicode):
+
+    _dir = os.path.join(app.root_path, 'texts')
+    _place_re = re.compile(r'\(([^\)]+)\)$')
+
+    def __new__(cls, year):
+        # get the text
+        filename = 'history{0}.md'.format(year)
+        path = os.path.join(cls._dir, filename)
+        try:
+            with open(path) as f:
+                text = f.read().strip().decode('utf-8')
+        except IOError:
+            text = ''
+
+        title = None
+        place = None
+
+        # find title
+        lines = []
+        for line in text.splitlines():
+            print line
+            if line.startswith('# '):
+                title = line[2:]
+            else:
+                lines.append(line)
+        text = '\n'.join(lines)
+
+        # parse out place
+        match = cls._place_re.search(title)
+        if match:
+            place = match.group(1)
+            title = cls._place_re.sub('', title).strip()
+
+        # set properties
+        obj = unicode.__new__(cls, text)
+        obj.title = title
+        obj.place = place
+        obj.year = int(year)
+        return obj
+
+    @classmethod
+    def find_all(cls):
+        texts = []
+        for basename in os.listdir(cls._dir):
+            if basename.startswith('history'):
+                year = int(basename[7:11])  # historyXXXX.md
+                text = cls(year)
+                texts.append(text)
+        return sorted(texts, key=lambda t: t.year, reverse=True)
