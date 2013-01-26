@@ -5,13 +5,14 @@ import os
 import re
 import urllib
 import datetime
+import itertools
 from lxml import html
 
 from taborprekvapeni import app, http
 from taborprekvapeni.cache import cache
 
 
-class BasicInfo(object):
+class BasicInfo(dict):
     """Basic info about the camp fetched from tabory.cz.
 
     You can access data in following way::
@@ -31,15 +32,13 @@ class BasicInfo(object):
 
     _url = 'http://www.tabory.cz/lokalita/letni-tabory-cr/varvazov/'
     _redirect = 'http://www.tabory.cz/externi.php?p='
-    _data = {}
 
     def __init__(self):
-        def init():
-            return self._parse(http.get(self._url))
-        self._data = cache(self.__class__.__name__, init)
+        data = cache(self.__class__.__name__, self._fetch)
+        self.update(data)
 
-    def __getitem__(self, key):
-        return self._data[key]
+    def _fetch(self):
+        return self._parse(http.get(self._url))
 
     def _remove_redirect(self, url):
         if self._redirect in url:
@@ -168,3 +167,76 @@ class HistoryText(unicode):
                 text = cls(year)
                 texts.append(text)
         return sorted(texts, key=lambda t: t.year, reverse=True)
+
+
+class PhotoAlbums(dict):
+
+    _url = 'http://hlavas.rajce.idnes.cz/'
+    _camp_re = re.compile(u't[áa]bor\D{0,3}(\d{4}|\d{2})', re.I)
+
+    def __init__(self):
+        data = self._fetch()  # cache(self.__class__.__name__, self._fetch)
+        self.update(data)
+
+    def _is_camp_specific(self, album):
+        return bool(self._camp_re.search(album.text))
+
+    def _is_secure(self, album):
+        return 'secure' in album.get('class').split()
+
+    def _parse_year(self, album):
+        year = int(self._camp_re.search(album.text).group(1))
+        if year < 90:
+            return 2000 + year
+        if year < 100:
+            return 1900 + year
+        return year
+
+    def _parse_url(self, album):
+        return album.get('href')
+
+    def _parse_image_url(self, album):
+        query = "./ancestor::li[1]//*[contains(@class, 'photo')]//img"
+        thumb = album.xpath(query)[0].get('src')
+        return thumb.replace('/thumb/', '/images/')
+
+    def _parse_count(self, album):
+        query = "./ancestor::li[1]//*[contains(@style, 'mediaCount')]/text()"
+        count_text = album.xpath(query)[0]
+        count = int(re.match('\d+', count_text).group(0))
+        return count
+
+    def _generate_albums(self, url):
+        for page in itertools.count():
+            # fetch page URL
+            params = urllib.urlencode({'page': page})
+            page_url = '?'.join([url, params])
+            dom = html.fromstring(http.get(page_url))
+
+            # parse out album names
+            query = "//a[contains(@class, 'albumName')]"
+            albums = dom.xpath(query)
+
+            # break infinite iteration
+            if not albums:
+                break
+
+            # else, filter album names to camp-specific only
+            for album in albums:
+                is_camp = self._is_camp_specific(album)
+                is_secure = self._is_secure(album)
+
+                if is_camp and not is_secure:
+                    yield {
+                        'year': self._parse_year(album),
+                        'url': self._parse_url(album),
+                        'image_url': self._parse_image_url(album),
+                        'count': self._parse_count(album),
+                    }
+
+    def _fetch(self):
+        key = lambda a: a['year']
+        all_albums = sorted(self._generate_albums(self._url),
+                            key=key, reverse=True)
+        for year, albums in itertools.groupby(all_albums, key=key):
+            yield year, list(albums)

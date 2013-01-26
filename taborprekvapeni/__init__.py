@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
+__version__ = '0.0.10'
+
+
 import logging
 from redis import StrictRedis as Redis
 

@@ -3,8 +3,17 @@
 
 from jinja2 import Markup
 from flask.ext.markdown import Markdown
+from flask import url_for as original_url_for
 
-from taborprekvapeni import app
+from taborprekvapeni import app, __version__ as version
+
+
+def url_for(endpoint, **values):
+    url = original_url_for(endpoint, **values)
+    if endpoint == 'static':
+        sep = '&' if ('?' in url) else '?'
+        url += '{0}v{1}'.format(sep, version)
+    return url
 
 
 @app.before_request

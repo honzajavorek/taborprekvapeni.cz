@@ -7,7 +7,7 @@ from fabric.api import *
 
 
 base_path = os.path.dirname(__file__)
-version_file = 'setup.py'
+version_file = 'taborprekvapeni/__init__.py'
 
 
 if os.getcwd() != base_path:
@@ -25,7 +25,7 @@ def capture(cmd):
 
 def bump_version():
     """Automatically bump version."""
-    version_re = re.compile(r"version='([^']+)'")
+    version_re = re.compile(r"__version__ = '([^']+)'")
 
     with open(version_file) as f:
         code = f.read()
@@ -40,7 +40,7 @@ def bump_version():
     version = '.'.join(map(str, [major, minor, micro]))
 
     puts('Bumping version to {0}.'.format(version))
-    code = version_re.sub("version='{0}'".format(version), code)
+    code = version_re.sub("__version__ = '{0}'".format(version), code)
 
     with open(version_file, 'w') as f:
         f.write(code)

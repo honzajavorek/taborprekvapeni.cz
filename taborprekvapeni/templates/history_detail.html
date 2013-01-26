@@ -11,6 +11,10 @@
 {{ macros.volume_image(year) }}
 {{ text|markdown }}
 
+{% if albums %}
+    {{ macros.album_gallery(albums) }}
+{% endif %}
+
 {% endblock %}
 
 

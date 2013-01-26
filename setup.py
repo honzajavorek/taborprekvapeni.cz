@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 
 
+import re
 from setuptools import setup, find_packages
+
+
+# determine version
+code = open('taborprekvapeni/__init__.py', 'r').read(200)
+version = re.search(r'__version__ = \'([^\'"]*)\'', code).group(1)
 
 
 setup(
     name='taborprekvapeni',
-    version='0.0.10',
+    version=version,
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
@@ -18,5 +24,6 @@ setup(
         'lxml>=3.1.beta1',
         'redis==2.7.2',
         'times==0.6',
+        'pil==1.1.7',
     ],
 )

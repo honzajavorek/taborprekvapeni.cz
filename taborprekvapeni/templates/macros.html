@@ -46,3 +46,26 @@
     {%- endfor -%}
     </ul>
 {%- endmacro %}
+
+
+{% macro album_image(album) -%}
+    <img src="{{ url_for('image_proxy', url=album.image_url, width=250, height=250) }}" width="250" height="250">
+{%- endmacro %}
+
+
+{% macro album_gallery(albums) -%}
+    <ul>
+    {% for album in albums %}
+        <li>
+            <a href="{{ album.url }}">
+                {{ album_image(album) }}
+                {% if album.count == 1 %}
+                    1 fotka
+                {% else %}
+                    {{ album.count }} fotek
+                {% endif %}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+{%- endmacro %}
