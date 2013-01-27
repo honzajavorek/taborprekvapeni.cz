@@ -1,0 +1,30 @@
+{% import 'macros.html' as macros with context %}
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<p><a href="{{ url_for('team') }}">Všichni vedoucí</a></p>
+<h1>
+    {{ text.full_name|safe }}
+    {% if text.nickname %}
+        <small>{{ text.nickname|safe }}</small>
+    {% endif %}
+</h1>
+<p>{{ text.post }}</p>
+
+{% if text %}
+    {{ macros.volume_image(year) }}
+    {{ text|markdown }}
+{% endif %}
+
+{% endblock %}
+
+
+{% block submenu %}
+
+<h2>Všichni vedoucí</h2>
+{{ macros.team_menu(all_texts) }}
+<hr>
+
+{% endblock %}

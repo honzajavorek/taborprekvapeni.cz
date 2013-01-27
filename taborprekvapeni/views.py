@@ -8,7 +8,8 @@ from taborprekvapeni import app
 from taborprekvapeni.image import Image
 from taborprekvapeni.cache import cached
 from taborprekvapeni.templating import url_for
-from taborprekvapeni.models import BasicInfo, HistoryText, PhotoAlbums
+from taborprekvapeni.models import (BasicInfo, HistoryText, PhotoAlbums,
+                                    TeamMemberText)
 
 
 @app.context_processor
@@ -51,10 +52,19 @@ def contact():
     return render_template('contact.html')
 
 
+@app.route('/tym-vedoucich/<slug_url>')
 @app.route('/tym-vedoucich')
 @cached()
-def team():
-    return render_template('team.html')
+def team(slug_url=None):
+    all_texts = TeamMemberText.find_all()
+
+    if not slug_url:
+        # index page with listing
+        return render_template('team.html', all_texts=all_texts)
+
+    text = TeamMemberText.from_slug_url(slug_url) or abort(404)
+    return render_template('team_detail.html', text=text,
+                           all_texts=all_texts)
 
 
 @app.route('/historie-fotky/<int:year>')
@@ -62,14 +72,26 @@ def team():
 @cached()
 def history(year=None):
     all_texts = HistoryText.find_all()
-    all_albums = PhotoAlbums()
 
-    if year:
-        text = HistoryText(year) or abort(404)
-        albums = all_albums.get(year, [])
-        return render_template('history_detail.html', year=year, text=text,
-                               all_texts=all_texts, albums=albums)
-    return render_template('history.html', all_texts=all_texts)
+    if not year:
+        # index page with listing
+        return render_template('history.html', all_texts=all_texts)
+
+    all_albums = PhotoAlbums()
+    text = HistoryText(year)
+    albums = all_albums.get(year, [])
+
+    has_content = any([
+        # has non-empty text
+        text,
+        # has essential attributes and albums
+        text.title and text.place and all_albums.get(year),
+    ])
+
+    if not has_content:
+        abort(404)
+    return render_template('history_detail.html', year=year, text=text,
+                           all_texts=all_texts, albums=albums)
 
 
 @app.route('/image')

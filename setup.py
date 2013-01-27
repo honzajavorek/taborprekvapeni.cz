@@ -25,5 +25,6 @@ setup(
         'redis==2.7.2',
         'times==0.6',
         'pil==1.1.7',
+        'unidecode==0.04.11',
     ],
 )

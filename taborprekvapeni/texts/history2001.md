@@ -1,2 +1,0 @@
-
-# Řeka bohů (Ostrovec)

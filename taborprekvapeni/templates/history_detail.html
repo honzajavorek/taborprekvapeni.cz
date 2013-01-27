@@ -5,11 +5,14 @@
 {% block content %}
 
 <p><a href="{{ url_for('history') }}">Všechny ročníky</a></p>
-<h1>{{ text.title }}</h1>
+<h1>{{ text.title|safe }}</h1>
 <p>{{ text.place }} {{ year }}</p>
 
-{{ macros.volume_image(year) }}
-{{ text|markdown }}
+{% if text %}
+    {{ macros.volume_image(year) }}
+    {{ text|markdown }}
+    <p><em>Pavel Gál, hlavní vedoucí</em></p>
+{% endif %}
 
 {% if albums %}
     <h2>Alba s fotkami</h2>
@@ -22,7 +25,7 @@
 {% block submenu %}
 
 <h2>Všechny ročníky</h2>
-{{ macros.history_menu(all_texts)|safe }}
+{{ macros.history_menu(all_texts) }}
 <hr>
 
 {% endblock %}

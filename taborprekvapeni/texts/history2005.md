@@ -1,2 +1,0 @@
-
-# Vilém Tell (Ostrovec)

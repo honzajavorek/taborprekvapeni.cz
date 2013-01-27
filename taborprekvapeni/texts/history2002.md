@@ -1,2 +1,0 @@
-
-# Atlantida &ndash; povodeň (Ostrovec)

@@ -118,25 +118,20 @@ class BasicInfo(dict):
         return {'junior': rows[1], 'senior': rows[0]}
 
 
-class HistoryText(unicode):
+class TextParser(object):
 
-    _dir = os.path.join(app.root_path, 'texts')
-    _place_re = re.compile(r'\(([^\)]+)\)$')
+    _meta_re = {
+        'parentheses': re.compile(r'\(([^\)]+)\)'),
+        'square_brackets': re.compile(r'\[([^\]]+)\]'),
+        'braces': re.compile(r'\{([^\}]+)\}'),
+    }
 
-    def __new__(cls, year):
-        # get the text
-        filename = 'history{0}.md'.format(year)
-        path = os.path.join(cls._dir, filename)
-        try:
-            with open(path) as f:
-                text = f.read().strip().decode('utf-8')
-        except IOError:
-            text = ''
+    def parse(self, filename):
+        with open(filename) as f:
+            text = f.read().strip().decode('utf-8')
 
+        # find title and extract it
         title = None
-        place = None
-
-        # find title
         lines = []
         for line in text.splitlines():
             if line.startswith('# '):
@@ -145,16 +140,35 @@ class HistoryText(unicode):
                 lines.append(line)
         text = '\n'.join(lines)
 
-        # parse out place
-        match = cls._place_re.search(title)
-        if match:
-            place = match.group(1)
-            title = cls._place_re.sub('', title).strip()
+        # parse properties
+        meta = self._parse_meta(title) if title else {}
+        return text, meta
+
+    def _parse_meta(self, title):
+        meta = {}
+        for meta_name, meta_re in self._meta_re.items():
+            match = meta_re.search(title)
+            if match:
+                meta[meta_name] = match.group(1)
+                title = meta_re.sub('', title).strip()
+        meta['title'] = title
+        return meta
+
+
+class HistoryText(unicode):
+
+    _dir = os.path.join(app.root_path, 'texts', 'history')
+
+    def __new__(cls, year):
+        # get the text
+        path = os.path.join(cls._dir, str(year) + '.md')
+        text, meta = TextParser().parse(path)
+
+        obj = unicode.__new__(cls, text)
 
         # set properties
-        obj = unicode.__new__(cls, text)
-        obj.title = title
-        obj.place = place
+        obj.title = meta['title']
+        obj.place = meta.get('parentheses')
         obj.year = int(year)
         return obj
 
@@ -162,11 +176,47 @@ class HistoryText(unicode):
     def find_all(cls):
         texts = []
         for basename in os.listdir(cls._dir):
-            if basename.startswith('history'):
-                year = int(basename[7:11])  # historyXXXX.md
-                text = cls(year)
-                texts.append(text)
+            year = int(basename[:4])  # YYYY.md
+            text = cls(year)
+            texts.append(text)
         return sorted(texts, key=lambda t: t.year, reverse=True)
+
+
+class TeamMemberText(unicode):
+
+    _dir = os.path.join(app.root_path, 'texts', 'team')
+
+    def __new__(cls, slug_file):
+        # get the text
+        path = os.path.join(cls._dir, slug_file + '.md')
+        text, meta = TextParser().parse(path)
+
+        obj = unicode.__new__(cls, text)
+
+        # set properties
+        obj.full_name = obj.title = meta['title']
+        obj.names = meta['title'].split()
+        obj.nickname = meta.get('parentheses')
+        obj.post = meta.get('square_brackets')
+        obj.slug_url = slug_file.replace('_', '-')
+        obj.slug_file = slug_file
+        return obj
+
+    @classmethod
+    def from_slug_url(cls, slug_url):
+        slug_file = slug_url.replace('-', '_')
+        return cls(slug_file)
+
+    @classmethod
+    def find_all(cls):
+        texts = []
+        for basename in os.listdir(cls._dir):
+            slug = basename[:-3]  # name_surname.md
+            text = cls(slug)
+            texts.append(text)
+
+        key_surname = lambda t: t.names[-1]
+        return sorted(texts, key=key_surname)
 
 
 class PhotoAlbums(dict):

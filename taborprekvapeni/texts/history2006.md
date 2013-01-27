@@ -1,2 +1,0 @@
-
-# Loupeživí rytíři (Ostrovec)

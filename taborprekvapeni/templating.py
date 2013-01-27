@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
+import re
+import os
+import unidecode
 from jinja2 import Markup
 from flask.ext.markdown import Markdown
 from flask import url_for as original_url_for
@@ -24,6 +27,18 @@ def before_request():
     # instance of Markdown is created and registered
     # before each HTTP request.
     app.jinja_env.filters['markdown'] = md
+
+
+@app.template_filter()
+def file_exists(filename):
+    path = os.path.join(app.root_path, filename)
+    return os.path.exists(path)
+
+
+@app.template_filter()
+def slugify(string, sep='_'):
+    string = unidecode.unidecode(string).lower()
+    return re.sub(r'\W+', sep, string)
 
 
 @app.template_filter()

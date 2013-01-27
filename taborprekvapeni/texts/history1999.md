@@ -1,2 +1,0 @@
-
-# Pohanský bůžek Uhu (Růžená)

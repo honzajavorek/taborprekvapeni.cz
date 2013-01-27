@@ -1,6 +1,6 @@
 
 
-{% macro menu_item(url, text, class='') -%}
+{% macro menu_item(url, text, class='') %}
     {% if url == request.path or (url != '/' and request.path.startswith(url)) %}
         {% set class = class + ' selected' %}
         <li class="{{ class }}">
@@ -11,49 +11,55 @@
             <a href="{{ url }}">{{ text|safe }}</a>
         </li>
     {% endif %}
-{%- endmacro %}
+{% endmacro %}
 
 
-{% macro volume_image(year) -%}
-    {%- set year = year|string -%}
-    <img src="{{ url_for('static', filename='images/v' + year + '.jpg') }}" width="250" height="250">
-{%- endmacro %}
+{% macro volume_image(year) %}
+    {% set year = year|string %}
+    {% set filename = 'images/v' + year + '.jpg' %}
+
+    {% if not ('static/' + filename)|file_exists %}
+        {% set filename = 'images/placeholder.jpg' %}
+    {% endif %}
+
+    <img src="{{ url_for('static', filename=filename) }}" width="250" height="250">
+{% endmacro %}
 
 
-{% macro volume_item(year, place, topic) -%}
-    {%- set year = year|string -%}
+{% macro volume_item(year, place, topic) %}
+    {% set year = year|string %}
 
-    {%- set image = volume_image(year) -%}
-    {%- set topic = ('<em>' + topic + '</em>')|safe -%}
-    {%- set place = ('<small>' + place + ' ' + year + '</small>')|safe -%}
-    {%- set volume = 'v' + year -%}
+    {% set image_html = volume_image(year) %}
+    {% set topic_html = ('<em>' + topic + '</em>')|safe %}
+    {% set place_html = ('<small>' + place + ' ' + year + '</small>')|safe %}
+    {% set volume = 'v' + year %}
 
-    {{- menu_item(
+    {{ menu_item(
         url_for('history', year=year),
-        [image, topic, place]|join(' '),
-    ) -}}
-{%- endmacro %}
+        [image_html, topic_html, place_html]|join(' '),
+    ) }}
+{% endmacro %}
 
 
-{% macro history_menu(texts) -%}
+{% macro history_menu(texts) %}
     <ul>
-    {%- for text in texts -%}
-        {{- volume_item(
+    {% for text in texts %}
+        {{ volume_item(
             text.year,
             text.place,
             text.title
-        ) -}}
-    {%- endfor -%}
+        ) }}
+    {% endfor %}
     </ul>
-{%- endmacro %}
+{% endmacro %}
 
 
-{% macro album_image(album) -%}
+{% macro album_image(album) %}
     <img src="{{ url_for('image_proxy', url=album.image_url, width=250, height=250) }}" width="250" height="250">
-{%- endmacro %}
+{% endmacro %}
 
 
-{% macro album_gallery(albums) -%}
+{% macro album_gallery(albums) %}
     <ul>
     {% for album in albums %}
         <li>
@@ -68,4 +74,65 @@
         </li>
     {% endfor %}
     </ul>
-{%- endmacro %}
+{% endmacro %}
+
+
+{% macro member_image(slug_file) %}
+    {% set filename = 'images/' + slug_file + '.jpg' %}
+
+    {% if not ('static/' + filename)|file_exists %}
+        {% set filename = 'images/placeholder.jpg' %}
+    {% endif %}
+    <img src="{{ url_for('static', filename=filename) }}" width="250" height="250">
+{% endmacro %}
+
+
+{% macro member_item(slug_file, slug_url, name, nickname=None, post=None) %}
+    {% set image_html = member_image(slug_file) %}
+    {% set name_html = ('<strong>' + name + '</strong>')|safe %}
+    {% set post = post or 'vedoucí' %}
+    {% set post_html = ('<em>' + post + '</em>')|safe %}
+
+    {% if nickname %}
+        {% set nick_html = ('<small>' + nickname + '</small>')|safe %}
+    {% else %}
+        {% set nick_html = '' %}
+    {% endif %}
+
+    {{ menu_item(
+        url_for('team', slug_url=slug_url),
+        [image_html, name_html, nick_html, post_html]|join(' '),
+        post|slugify
+    ) }}
+{% endmacro %}
+
+
+{% macro team_menu(texts) %}
+    <ul>
+
+    {% for text in texts %}
+        {% if text.post == 'hlavní vedoucí' %}
+            {{ member_item(
+                text.slug_file,
+                text.slug_url,
+                text.full_name,
+                text.nickname,
+                text.post
+            ) }}
+        {% endif %}
+    {% endfor %}
+
+    {% for text in texts %}
+        {% if text.post != 'hlavní vedoucí' %}
+            {{ member_item(
+                text.slug_file,
+                text.slug_url,
+                text.full_name,
+                text.nickname,
+                text.post
+            ) }}
+        {% endif %}
+    {% endfor %}
+
+    </ul>
+{% endmacro %}

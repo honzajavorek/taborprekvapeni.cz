@@ -1,2 +1,0 @@
-
-# Hvězdná brána (Ostrovec)

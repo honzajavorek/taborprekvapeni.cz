@@ -1,2 +1,0 @@
-
-# Poklad Inků (Ostrovec)

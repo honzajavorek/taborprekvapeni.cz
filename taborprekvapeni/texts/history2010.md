@@ -1,2 +1,0 @@
-
-# Šifra mistra Leonarda (Varvažov)
