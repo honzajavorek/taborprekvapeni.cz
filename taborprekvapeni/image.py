@@ -50,9 +50,16 @@ class Image(object):
         left = abs(size[0] - width) / 2
         top = abs(size[1] - height) / 2
 
-        print (old_w, old_h), size, (left, top)
-
         box = (left, top, left + width, top + height)
+        image = image.crop(box)
+
+        self.image = image
+
+    def crop(self, pixels):
+        image = self.image
+
+        w, h = image.size
+        box = (pixels, pixels, w - pixels, h - pixels)
         image = image.crop(box)
 
         self.image = image

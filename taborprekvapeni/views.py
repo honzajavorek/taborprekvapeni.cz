@@ -40,13 +40,19 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/filozofie-program')
+@cached()
+def program():
+    return render_template('program.html')
+
+
 @app.route('/informace')
 @cached()
 def info():
     return render_template('info.html')
 
 
-@app.route('/kontakt-prihlaska')
+@app.route('/kontakty')
 @cached()
 def contact():
     return render_template('contact.html')
@@ -98,12 +104,14 @@ def history(year=None):
 def image_proxy():
     url = request.args.get('url') or abort(404)
 
-    w = request.args.get('width')
-    h = request.args.get('height')
+    w, h = request.args.get('resize', 'x').split('x')
+    crop = request.args.get('crop')
 
     img = Image.from_url(url)
     img.rotate()
 
+    if crop:
+        img.crop(int(crop))
     if w and h:
         img.resize_crop(int(w), int(h))
     img.sharpen()

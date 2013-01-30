@@ -1,0 +1,43 @@
+{%- import 'macros.html' as macros with context -%}
+{% extends 'base.html' %}
+
+
+{% block content %}{% filter markdown %}
+
+# Organizační informace
+
+Kompletní **organizační informace** jsou k dispozici [na webu provozovatele](http://www.tabory.cz/lokalita/letni-tabory-cr/varvazov/). **Pokyny k odjezdu** včetně PDF ke stažení lze najít zvlášť na následujících odkazech:
+
+- [{{ info.senior.topic }}]({{ info.senior.departure_url }}) ({{ info.senior.age_from }}&ndash;{{ info.senior.age_to }} let)
+- [{{ info.junior.topic }}]({{ info.junior.departure_url }}) ({{ info.junior.age_from }}&ndash;{{ info.junior.age_to }} let)
+
+## Místo konání
+
+Tábor se koná v Jižních Čechách, 7 km od Zvíkovského Podhradí. Detailní údaje o **RS Spolana Varvažov** jsou k dispozici [na webu provozovatele](http://www.tabory.cz/varvazov.html).
+
+<ul>
+    <li>
+        <a href="http://www.varvazov.wz.cz/foto.htm" target="_blank">
+            <img src="{{ url_for('image_proxy', url='http://www.varvazov.wz.cz/img00008.jpg', resize='250x250') }}" width="250" height="250">
+        </a>
+    </li>
+    <li>
+        <a href="http://www.varvazov.wz.cz/foto.htm" target="_blank">
+            <img src="{{ url_for('image_proxy', url='http://www.varvazov.wz.cz/img00006.jpg', resize='250x250') }}" width="250" height="250">
+        </a>
+    </li>
+</ul>
+
+### Adresa tábora
+
+Letní tábor **{{ info.senior.topic }} / {{ info.junior.topic }}**<br>
+RS Spolana Varvažov<br>
+397 01 Písek<br>
+
+### Doprava
+
+GPS: <code>49°25'58.253"N, 14°8'1.301"E</code><br>
+<a href="http://mapy.cz/s/6bOY" target="_blank">mapa</a>, <a href="http://www.varvazov.wz.cz/cesta.htm" target="_blank">popis cesty</a>
+
+
+{% endfilter %}{% endblock %}

@@ -9,10 +9,16 @@
         <title>{% block title %}Tábor plný překvapení - letní dětský tábor{% endblock %}</title>
     </head>
     <body>
+        <div id="fb-root"></div>
+        <script>
+            (function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id))return;js=d.createElement(s);js.id=id;
+            js.src='//connect.facebook.net/en_US/all.js#xfbml=1';fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));
+        </script>
+
         <p>
             <a href="{{ url_for('index') }}"><strong>Tábor plný překvapení</strong></a>
             &ndash;
-            Letní dětský tábor v Jižních Čechách s odjezdem z Prahy.
+            Letní tábor v Jižních Čechách pro děti od {{ info.junior.age_from }} do {{ info.senior.age_to }} let.
         </p>
         <hr>
 
@@ -24,11 +30,23 @@
         <h2>Menu</h2>
         <ul>
             {{ macros.menu_item(url_for('index'), 'Ahoj!') }}
-            {{ macros.menu_item(url_for('info'), 'Ročník ' + volume_year|string) }}
+            {{ macros.menu_item(url_for('program'), 'Filozofie a program') }}
             {{ macros.menu_item(url_for('team'), 'Tým vedoucích') }}
             {{ macros.menu_item(url_for('history'), 'Historie a fotky') }}
-            {{ macros.menu_item(url_for('contact'), 'Kontakt a přihláška') }}
+            {{ macros.menu_item(url_for('info'), 'Organizační informace') }}
+            {{ macros.menu_item(url_for('contact'), 'Kontakty') }}
         </ul>
+        <hr>
+
+        <h2>Stránka na Facebooku</h2>
+        <div class="fb-like-box"
+            data-href="http://www.facebook.com/taborprekvapeni"
+            data-width="292"
+            data-show-faces="true"
+            data-stream="false"
+            data-border-color="#FFF"
+            data-header="false">
+        </div>
         <hr>
 
         <p>

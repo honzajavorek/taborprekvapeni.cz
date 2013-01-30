@@ -32,7 +32,6 @@
     {% set image_html = volume_image(year) %}
     {% set topic_html = ('<em>' + topic + '</em>')|safe %}
     {% set place_html = ('<small>' + place + ' ' + year + '</small>')|safe %}
-    {% set volume = 'v' + year %}
 
     {{ menu_item(
         url_for('history', year=year),
@@ -55,7 +54,7 @@
 
 
 {% macro album_image(album) %}
-    <img src="{{ url_for('image_proxy', url=album.image_url, width=250, height=250) }}" width="250" height="250">
+    <img src="{{ url_for('image_proxy', url=album.image_url, resize='250x250') }}" width="250" height="250">
 {% endmacro %}
 
 
@@ -90,7 +89,6 @@
 {% macro member_item(slug_file, slug_url, name, nickname=None, post=None) %}
     {% set image_html = member_image(slug_file) %}
     {% set name_html = ('<strong>' + name + '</strong>')|safe %}
-    {% set post = post or 'vedoucí' %}
     {% set post_html = ('<em>' + post + '</em>')|safe %}
 
     {% if nickname %}
@@ -134,5 +132,23 @@
         {% endif %}
     {% endfor %}
 
+    </ul>
+{% endmacro %}
+
+
+{% macro orders(info) %}
+    <ul>
+        <li>
+            <img src="{{ url_for('image_proxy', url=info.senior.poster_url, crop=65, resize='250x250') }}" width="250" height="250">
+            <em>{{ info.senior.topic }} ({{ info.senior.age_from }}&ndash;{{ info.senior.age_to }} let)</em>
+            <small>Varvažov {{ volume_year }}</small><br>
+            <a href="{{ info.senior.book_url }}">Podat přihlášku: {{ info.senior.price }} Kč</a>
+        </li>
+        <li>
+            <img src="{{ url_for('image_proxy', url=info.junior.poster_url, crop=65, resize='250x250') }}" width="250" height="250">
+            <em>{{ info.junior.topic }} ({{ info.junior.age_from }}&ndash;{{ info.junior.age_to }} let)</em>
+            <small>Varvažov {{ volume_year }}</small><br>
+            <a href="{{ info.junior.book_url }}">Podat přihlášku: {{ info.junior.price }} Kč</a>
+        </li>
     </ul>
 {% endmacro %}
