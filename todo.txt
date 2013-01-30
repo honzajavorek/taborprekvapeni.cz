@@ -1,0 +1,32 @@
+
+Verze 1 k nahlednuti:
+
+- html zakladni styly ala wireframy
+- stranka s filozofii, programem
+
+Spusteni:
+
+- fb tagy, description, keywords
+- texty k vedoucim
+- design
+- realign loga
+- predelat fotky z picasy na rajce
+- google analytics
+
+Na cem to nestoji:
+
+- doplnit historii
+- fotky vedoucich
+- vylepsit copywriting
+- video od lukase
+- repre fotky do historie k jednotlivym textum
+
+Vedlejsi veci:
+
+- predelat diskusi
+- registrace do katalogů s tábory
+
+Videa:
+
+- https://www.youtube.com/watch?v=gXw4PnNH-n4
+- https://www.youtube.com/watch?v=SxJt8igWexc
