@@ -82,6 +82,7 @@ def deploy():
     # redis to go
     if 'REDISTOGO_URL' not in capture('heroku config | grep REDISTOGO_URL'):
         local('heroku addons:add redistogo')
+    local('heroku run python flushcache.py')
 
     # push to Heroku
     local('git push heroku {0}:master'.format(branch))
