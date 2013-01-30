@@ -70,6 +70,12 @@ class BasicInfo(dict):
         url = a.get('href')  # get its href attribute
         return self._remove_redirect(url)
 
+    def _parse_poster_url(self, poster_page_url):
+        contents = http.get(poster_page_url)
+        dom = html.fromstring(contents)
+        img = dom.xpath('.//img')[0]
+        return img.get('src')
+
     def _parse_price(self, cell):
         # get the first cluster of numbers
         price = re.search(r'\d+', cell.text).group(0)
@@ -96,7 +102,9 @@ class BasicInfo(dict):
             book_url = self._parse_url(tr[6])
             camp_id = self._parse_id(book_url)
 
-            poster_url = self._create_url('upoutavka.php', camp_id)
+            poster_page_url = self._create_url('upoutavka.php', camp_id)
+            poster_url = self._parse_poster_url(poster_page_url)
+
             departure_url = self._create_url('odjezdy.php', camp_id)
 
             rows.append({
@@ -197,7 +205,7 @@ class TeamMemberText(unicode):
         obj.full_name = obj.title = meta['title']
         obj.names = meta['title'].split()
         obj.nickname = meta.get('parentheses')
-        obj.post = meta.get('square_brackets')
+        obj.post = meta.get('square_brackets', u'vedoucí')
         obj.slug_url = slug_file.replace('_', '-')
         obj.slug_file = slug_file
         return obj
@@ -267,7 +275,8 @@ class PhotoAlbums(dict):
             dom = html.fromstring(http.get(page_url))
 
             # parse out album names
-            query = "//a[contains(@class, 'albumName')]"
+            query = ("//ul[contains(@id, 'albumList')]"
+                     "//a[contains(@class, 'albumName')]")
             albums = dom.xpath(query)
 
             # break infinite iteration
