@@ -6,55 +6,63 @@
         <meta name="description" content="{% block description %}{% endblock %}">
         <meta name="keywords" content="{% block keywords %}{% endblock %}">
         <title>{% block title %}Tábor plný překvapení - letní dětský tábor{% endblock %}</title>
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Domine&amp;subset=latin,latin-ext">
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     </head>
     <body>
-        <div id="fb-root"></div>
-        <script>
-            (function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id))return;js=d.createElement(s);js.id=id;
-            js.src='//connect.facebook.net/en_US/all.js#xfbml=1';fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));
-        </script>
+        <div class="document" id="{{ request.endpoint }}">
+            <div id="fb-root"></div>
+            <script>
+                (function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id))return;js=d.createElement(s);js.id=id;
+                js.src='//connect.facebook.net/en_US/all.js#xfbml=1';fjs.parentNode.insertBefore(js,fjs);}(document,'script','facebook-jssdk'));
+            </script>
 
-        <p>
-            <a href="{{ url_for('index') }}"><strong>Tábor plný překvapení</strong></a>
-            &ndash;
-            Letní tábor v Jižních Čechách pro děti od {{ info.junior.age_from }} do {{ info.senior.age_to }} let.
-        </p>
-        <hr>
+            <p class="header">
+                <a href="{{ url_for('index') }}"><strong>Tábor plný překvapení</strong></a>
+                &ndash;
+                Letní tábor v Jižních Čechách pro děti od {{ info.junior.age_from }} do {{ info.senior.age_to }} let.
+                <hr>
+            </p>
 
-        {% block content %}{% endblock %}
-        <hr>
+            <div class="content">
+            {% block content %}{% endblock %}
+            <hr>
+            </div>
 
-        {% block submenu %}{% endblock %}
+            <div class="subnav">
+                {% block subnav %}{% endblock %}
+            </div>
 
-        <h2>Menu</h2>
-        <ul>
-            {{ macros.menu_item(url_for('index'), 'Ahoj!') }}
-            {{ macros.menu_item(url_for('program'), 'Filozofie a program') }}
-            {{ macros.menu_item(url_for('team'), 'Tým vedoucích') }}
-            {{ macros.menu_item(url_for('history'), 'Historie a fotky') }}
-            {{ macros.menu_item(url_for('info'), 'Organizační informace') }}
-            {{ macros.menu_item(url_for('contact'), 'Kontakty') }}
-        </ul>
-        <hr>
+            <div class="nav">
+                <h2>Menu</h2>
+                <ul>
+                    {{ macros.menu_item(url_for('index'), 'Ahoj!') }}
+                    {{ macros.menu_item(url_for('program'), 'Filozofie a program') }}
+                    {{ macros.menu_item(url_for('team'), 'Tým vedoucích') }}
+                    {{ macros.menu_item(url_for('history'), 'Historie a fotky') }}
+                    {{ macros.menu_item(url_for('info'), 'Organizační informace') }}
+                    {{ macros.menu_item(url_for('contact'), 'Kontakty') }}
+                </ul>
+                <hr>
+            </div>
 
-        <h2>Stránka na Facebooku</h2>
-        <div class="fb-like-box"
-            data-href="http://www.facebook.com/taborprekvapeni"
-            data-width="292"
-            data-show-faces="true"
-            data-stream="false"
-            data-border-color="#FFF"
-            data-header="false">
+            <div class="fb">
+                <h2>Stránka na Facebooku</h2>
+                <div class="fb-like-box"
+                    data-href="http://www.facebook.com/taborprekvapeni"
+                    data-width="292"
+                    data-show-faces="true"
+                    data-stream="false"
+                    data-border-color="#FFF"
+                    data-header="false">
+                </div>
+                <hr>
+            </div>
+
+            <p class="footer">
+                <small><strong>Tábor plný překvapení</strong> je značka, pod kterou od roku 2004 vystupuje parta vedoucích v čele s Pavlem Gálem.
+                Provozovatelem tábora je <a href="http://www.tabory.cz">CK Topinka</a>.</small>
+            </p>
         </div>
-        <hr>
-
-        <p>
-            <strong>Tábor plný překvapení</strong> je značka, pod kterou od roku 2004 vystupuje parta vedoucích v čele s Pavlem Gálem.
-            Provozovatelem tábora je <a href="http://www.tabory.cz">CK Topinka</a>.
-        </p>
-
-        <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='jquery.exif.js') }}"></script>
-        <script src="{{ url_for('static', filename='main.js') }}"></script>
     </body>
 </html>

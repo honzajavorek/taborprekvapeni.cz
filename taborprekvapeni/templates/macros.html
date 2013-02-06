@@ -22,7 +22,7 @@
         {% set filename = 'images/placeholder.jpg' %}
     {% endif %}
 
-    <img src="{{ url_for('static', filename=filename) }}" width="250" height="250">
+    <img src="{{ url_for('static', filename=filename) }}" width="250" height="250" class="volume">
 {% endmacro %}
 
 
@@ -41,7 +41,7 @@
 
 
 {% macro history_menu(texts) %}
-    <ul>
+    <ul class="history gallery">
     {% for text in texts %}
         {{ volume_item(
             text.year,
@@ -54,12 +54,12 @@
 
 
 {% macro album_image(album) %}
-    <img src="{{ url_for('image_proxy', url=album.image_url, resize='250x250') }}" width="250" height="250">
+    <img src="{{ url_for('image_proxy', url=album.image_url, resize='250x250') }}" width="250" height="250" class="album">
 {% endmacro %}
 
 
 {% macro album_gallery(albums) %}
-    <ul>
+    <ul class="albums gallery">
     {% for album in albums %}
         <li>
             <a href="{{ album.url }}" target="_blank">
@@ -82,7 +82,7 @@
     {% if not ('static/' + filename)|file_exists %}
         {% set filename = 'images/placeholder.jpg' %}
     {% endif %}
-    <img src="{{ url_for('static', filename=filename) }}" width="250" height="250">
+    <img src="{{ url_for('static', filename=filename) }}" width="250" height="250" class="member">
 {% endmacro %}
 
 
@@ -106,7 +106,7 @@
 
 
 {% macro team_menu(texts) %}
-    <ul>
+    <ul class="team gallery">
 
     {% for text in texts %}
         {% if text.post == 'hlavní vedoucí' %}
@@ -137,18 +137,22 @@
 
 
 {% macro orders(info) %}
-    <ul>
+    <ul class="orders gallery">
         <li>
-            <img src="{{ url_for('image_proxy', url=info.senior.poster_url, crop=65, resize='250x250') }}" width="250" height="250">
-            <em>{{ info.senior.topic }} ({{ info.senior.age_from }}&ndash;{{ info.senior.age_to }} let)</em>
-            <small>Varvažov {{ volume_year }}</small><br>
-            <a href="{{ info.senior.book_url }}">Podat přihlášku: {{ info.senior.price }} Kč</a>
+            <a href="{{ info.senior.book_url }}">
+                <img src="{{ url_for('image_proxy', url=info.senior.poster_url, crop=65, resize='250x250') }}" width="250" height="250">
+                <em>{{ info.senior.topic }} ({{ info.senior.age_from }}&ndash;{{ info.senior.age_to }} let)</em>
+                <small>Varvažov {{ volume_year }}</small>
+                <strong><span class="button">Podat přihlášku: {{ info.senior.price }} Kč</span></strong>
+            </a>
         </li>
         <li>
-            <img src="{{ url_for('image_proxy', url=info.junior.poster_url, crop=65, resize='250x250') }}" width="250" height="250">
-            <em>{{ info.junior.topic }} ({{ info.junior.age_from }}&ndash;{{ info.junior.age_to }} let)</em>
-            <small>Varvažov {{ volume_year }}</small><br>
-            <a href="{{ info.junior.book_url }}">Podat přihlášku: {{ info.junior.price }} Kč</a>
+            <a href="{{ info.junior.book_url }}">
+                <img src="{{ url_for('image_proxy', url=info.junior.poster_url, crop=65, resize='250x250') }}" width="250" height="250">
+                <em>{{ info.junior.topic }} ({{ info.junior.age_from }}&ndash;{{ info.junior.age_to }} let)</em>
+                <small>Varvažov {{ volume_year }}</small>
+                <strong><span class="button">Podat přihlášku: {{ info.junior.price }} Kč</span></strong>
+            </a>
         </li>
     </ul>
 {% endmacro %}

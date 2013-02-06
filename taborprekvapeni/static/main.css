@@ -1,0 +1,208 @@
+
+html, body {
+    margin: 0; padding: 0;
+    font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue',
+                 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+                 /* http://css-tricks.com/snippets/css/better-helvetica/ */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Domine', serif;
+    color: #BC280A;
+}
+
+body {
+    text-align: center;
+}
+
+a {
+    color: #4A7A15;
+}
+
+.document {
+    width: 950px;
+    margin: 0 auto;
+    text-align: left;
+    position: relative;
+}
+
+ul.gallery, .gallery li, .nav ul, .nav li {
+    margin: 0; padding: 0;
+    list-style-type: none;
+}
+
+.gallery li {
+    width: 250px;
+    display: block;
+    float: left;
+    text-align: center;
+}
+
+.gallery li img, .gallery li em, .gallery li small, .gallery li strong,
+.last_year li img, .last_year li em, .last_year li small, .last_year li strong {
+    margin: 0.5em auto;
+    display: block;
+}
+
+.gallery:before, .gallery:after { content: " "; display: table; }
+.gallery:after { clear: both; }
+.gallery { *zoom: 1; }
+
+.button {
+    display: inline;
+    border: 1px solid #000;
+    text-align: center;
+    margin: 0.5em; padding: 0.3em 0.5em;
+
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -khtml-border-radius: 5px;
+}
+
+.header {
+    margin: 0; padding: 1em;
+    height: 100px;
+}
+
+.header strong {
+    font-size: 2em;
+}
+
+.nav {
+    position: absolute; right: 0; top: 80px;
+    padding: 0.3em;
+    border: 1px solid #000;
+
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -khtml-border-radius: 5px;
+}
+
+.nav li {
+    display: inline;
+    margin: 0 0.5em;
+}
+
+hr, .nav h2, .fb h2 {
+    display: none;
+}
+
+.motivation li {
+    clear: both;
+    position: relative;
+    margin: 1em 300px 1em 0;
+}
+
+.motivation .button {
+    position: absolute;
+    left: 620px; bottom: 10px;
+    white-space: nowrap;
+}
+
+.references:before, .references:after { content: " "; display: table; }
+.references:after { clear: both; }
+.references { *zoom: 1; }
+
+.reference {
+    width: 50%;
+    float: left;
+}
+
+.reference dl {
+    padding: 1em;
+}
+
+dt {
+    font-weight: bold;
+}
+
+dt, dd {
+    margin: 0.5em;
+}
+
+dd {
+    margin-left: 2em;
+    font-style: italic;
+}
+
+.footer, .fb, .subnav h2 {
+    border-top: 1px solid #000;
+    margin: 4em 0 2em 0; padding: 1em 0;
+}
+
+.orders, .references {
+    margin: 3em;
+}
+
+.orders li, .facility li {
+    width: 50%;
+}
+
+.orders li strong {
+    line-height: 2em;
+    font-weight: normal;
+}
+
+.last_year {
+    text-align: center;
+}
+
+.last_year h2 {
+    text-align: left;
+}
+
+.last_year img {
+    display: block;
+    margin: 0.5em auto;
+}
+
+.gallery li.hlavni_vedouci {
+    width: 100%;
+}
+
+.team li, .history li, .albums li {
+    width: 33%;
+}
+
+.team li strong, .team li small {
+    display: inline;
+}
+
+.subnav ul li, .subnav ul li.hlavni_vedouci {
+    width: 20%;
+}
+
+.subnav ul li img {
+    width: 100px; height: 100px;
+}
+
+.history li {
+    height: 370px;
+}
+
+.subnav .history li {
+    height: 220px;
+}
+
+.text img {
+    float: right;
+    margin: 0.5em 0 1em 1em;
+}
+
+.back a:before {
+    content: "« ";
+}
+
+.content {
+    position: relative;
+}
+
+.back {
+    position: absolute; top: 0; right: 0;
+}
+
+.selected strong {
+    margin: 0 !important;
+}

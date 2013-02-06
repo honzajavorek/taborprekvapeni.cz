@@ -1,39 +1,72 @@
 {% import 'macros.html' as macros with context %}
 {% extends 'base.html' %}
-{% block content %}{% filter markdown %}
+{% block content %}
 
-# Ahoj!
+<h1>Ahoj!</h1>
 
-Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi běhali po lese, stavěli ze dřeva, vymýšleli a luštili šifry, převlékali se do masek a poskakovali na diskotéce. Baví nás to už {{ volume_no }} let.
-
-## Proč jet s námi?
-
-- Náš tábor je **aktivně prožitá část prázdnin**. Děti nesedí u počítačů ani se nepovalují v chatičkách. Na celé dva týdny pro ně máme **nabitý celodenní program** plný soutěží a her. Chceme, aby se s námi děti bavily, něco se naučily, aby poznaly kamarádství, přátelství, soudržnost, ale také soutěž, soupeření a souboje. Vedeme děti k **samostatnosti a zodpovědnosti**.<br>
-  <a href="{{ url_for('program') }}">Více o naší filozofii a programu</a>
-- Tým vedoucích je **sehraná parta lidí**, která tábor připravuje několik měsíců před jeho začátkem. Pavel Gál je **zkušený hlavní vedoucí**, na tábory jezdí už {{ volume_year - 1980 }} let. Součástí týmu je samozřejmě také zdravotnice.<br>
-  <a href="{{ url_for('team') }}">Vše o vedoucích</a>
-- Organizačně je tábor rozdělen do dvou jednotek - **děti do {{ info.junior.age_to }} let hrají samostatnou hru**, žijí svůj táborový život, který se jen sporadicky prolíná s hrami a soutěženi těch velkých. Program je tedy vždy adekvátní věkovému složení účastníků.<br>
-  <a href="{{ url_for('program') }}">Více o programu</a>
-- Základnu máme v rekreačním středisku uprostřed lesů v malebném údolí nedaleko Zvíkovského Podhradí. Děti bydlí v **chatkách nebo stanech s podsadou**, k dispozici mají v hlavní budově **normální WC a sprchy s teplou vodou**. Jídelna zajišťuje **stravu 5&times; denně**. V areálu je prostor pro míčové hry, ráchání v přírodním koupališti, táboráky.<br>
-  <a href="{{ url_for('info') }}">Vše o místě konání</a>
-- Odjezd na tábor je **z pražského Florence**, počítá se ale i se svozem dětí **z dalších měst**, jež jsou na trasách autobusů a vlaků Student Agency a AMS bus. Samozřejmě je možná i vlastní doprava autem.<br>
-  <a href="{{ url_for('info') }}">Další organizační informace</a>
-
-## Tábor {{ volume_year }} {% if not is_past %}začíná už za {{ countdown }} dní!{% endif %}
-
-{% endfilter %}{{ macros.orders(info) }}{% filter markdown %}
-
-## Co o nás píší
-
-...
-
-## Loňský tábor
-
-{% endfilter %}
-<a href="{{ url_for('history', year=(volume_year - 1)) }}">
-    {{ macros.volume_image(volume_year - 1) }}
-    Jak jsme si hráli v roce {{ volume_year - 1 }}
-</a>
+<div class="lead">
 {% filter markdown %}
+Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi běhali po lese, stavěli ze dřeva, vymýšleli a luštili šifry, převlékali se do masek a poskakovali na diskotéce. Baví nás to už {{ volume_no }} let.
+{% endfilter %}
+</div>
 
-{% endfilter %}{% endblock %}
+<div class="motivation">
+    <h2>Proč jet s námi?</h2>
+    <ul>
+        <li>
+            {% filter markdown %}Náš tábor je **aktivně prožitá část prázdnin**. Děti nesedí u počítačů ani se nepovalují v chatičkách. Na celé dva týdny pro ně máme **nabitý celodenní program** plný soutěží a her. Chceme, aby se s námi děti bavily, něco se naučily, aby poznaly kamarádství, přátelství, soudržnost, ale také soutěž, soupeření a souboje. Vedeme děti k **samostatnosti a zodpovědnosti**.{% endfilter %}
+
+            <a href="{{ url_for('program') }}" class="button">Více o naší filozofii a programu</a>
+        </li>
+        <li>
+            {% filter markdown %}Tým vedoucích je **sehraná parta lidí**, která tábor připravuje několik měsíců před jeho začátkem. [Pavel Gál]({{ url_for('team', slug_url='pavel-gal') }}) je **zkušený hlavní vedoucí**, na tábory jezdí už {{ volume_year - 1980 }} let. Součástí týmu je samozřejmě také zdravotnice.{% endfilter %}
+
+            <a href="{{ url_for('team') }}" class="button">Vše o vedoucích</a>
+        </li>
+        <li>
+            {% filter markdown %}Organizačně je tábor rozdělen do dvou jednotek - **děti do {{ info.junior.age_to }} let hrají samostatnou hru**, žijí svůj táborový život, který se jen sporadicky prolíná s hrami a soutěženi těch velkých. Program je tedy vždy adekvátní věkovému složení účastníků.{% endfilter %}
+
+            <a href="{{ url_for('program') }}" class="button">Více o programu</a>
+        </li>
+        <li>
+            {% filter markdown %}Základnu máme v rekreačním středisku uprostřed lesů v malebném údolí nedaleko Zvíkovského Podhradí. Děti bydlí v **chatkách nebo stanech s podsadou**, k dispozici mají v hlavní budově **normální WC a sprchy s teplou vodou**. Jídelna zajišťuje **stravu 5&times; denně**. V areálu je prostor pro míčové hry, ráchání v přírodním koupališti, táboráky.{% endfilter %}
+
+            <a href="{{ url_for('info') }}" class="button">Vše o místě konání</a>
+        </li>
+        <li>
+            {% filter markdown %}Odjezd na tábor je **z pražského Florence**, počítá se ale i se svozem dětí **z dalších měst**, jež jsou na trasách autobusů a vlaků Student Agency a AMS bus. Samozřejmě je možná i vlastní doprava autem.{% endfilter %}
+
+            <a href="{{ url_for('info') }}" class="button">Další organizační informace</a>
+        </li>
+  </ul>
+</div>
+
+<h2>Tábor {{ volume_year }} {% if not is_past %}začíná už za {{ countdown }} dní!{% endif %}</h2>
+
+{{ macros.orders(info) }}
+
+<div class="references">
+    <div class="reference testimonials">
+        <h2>Co o nás píší</h2>
+        <dl>
+            <dt>Paní Kadrnožková</dt>
+            <dd>Jsou skvělí, děti ráda pošlu zase!</dd>
+
+            <dt>Pan Trumbera</dt>
+            <dd>Jsou fakt skvělí, uličníka pošlu určitě zas! Tramtarará, tralalí.</dd>
+
+            <dt>Paní Kadrnožková</dt>
+            <dd>Jsou skvělí, děti ráda pošlu zase!</dd>
+        </dl>
+    </div>
+    <div class="reference last_year">
+        <h2>Loňský tábor</h2>
+        <p>
+            <a href="{{ url_for('history', year=(volume_year - 1)) }}">
+                {{ macros.volume_image(volume_year - 1) }}
+                Jak jsme si hráli v roce {{ volume_year - 1 }}
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}
