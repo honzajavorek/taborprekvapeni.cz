@@ -101,6 +101,10 @@ hr, .nav h2, .fb h2 {
     white-space: nowrap;
 }
 
+.motivation .button:after {
+    content: " »";
+}
+
 .references:before, .references:after { content: " "; display: table; }
 .references:after { clear: both; }
 .references { *zoom: 1; }
@@ -205,4 +209,8 @@ dd {
 
 .selected strong {
     margin: 0 !important;
+}
+
+.fb-like-box {
+    height: 260px;
 }

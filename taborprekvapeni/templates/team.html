@@ -2,10 +2,14 @@
 {% extends 'base.html' %}
 
 
-{% block content %}
+{% block content %}{% filter markdown %}
 
-<h1>Tým vedoucích</h1>
+# Tým vedoucích
 
+Tábor pro nás nejsou jen dva týdny během léta. Ač jsme z různých koutů republiky, scházíme se po celý rok a své členy si pečlivě vybíráme.
+
+Nový ročník tábora připravujeme každoročně již od ledna či února. Do detailu vypracováváme rámcový plán činností, zpracováváme témata celotáborové hry, píšeme doprovodný příběh (čítá zhruba dvacet stránek strojopisu a napsat ho je vážně fuška :-) a připravujeme grafickou stránku tábora – nástěnky, diplomy… Vymýšlíme, rozpracováváme a dolaďujeme pravidla jednotlivých etap, sdělujeme si nápady, připomínkujeme si již zpracované.
+
+{% endfilter %}
 {{ macros.team_menu(all_texts) }}
-
 {% endblock %}

@@ -40,7 +40,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/filozofie-program')
+@app.route('/filozofie-napln')
 @cached()
 def program():
     return render_template('program.html')

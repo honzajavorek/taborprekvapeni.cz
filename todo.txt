@@ -1,9 +1,4 @@
 
-Verze 1 k nahlednuti:
-
-- stranka s filozofii, programem
-- html zakladni styly ala wireframy
-
 Spusteni:
 
 - fb tagy, description, keywords
@@ -12,6 +7,8 @@ Spusteni:
 - realign loga
 - favicon
 - google analytics
+- cachovani obrazku, predelat to klidne na mongodb
+  (na heroku vic mista zdarma) http://docs.mongodb.org/manual/tutorial/expire-data/
 
 Na cem to nestoji:
 
