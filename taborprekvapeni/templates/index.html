@@ -19,19 +19,21 @@ Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi 
 - Odjezd na tábor je **z pražského Florence**, počítá se ale i se svozem dětí **z dalších měst**, jež jsou na trasách autobusů a vlaků Student Agency a AMS bus. Samozřejmě je možná i vlastní doprava autem.<br>
   <a href="{{ url_for('info') }}">Další organizační informace</a>
 
-## Co o nás píší
-
-...
-
 ## Tábor {{ volume_year }} {% if not is_past %}začíná už za {{ countdown }} dní!{% endif %}
 
 {% endfilter %}{{ macros.orders(info) }}{% filter markdown %}
 
+## Co o nás píší
+
+...
+
 ## Loňský tábor
 
-{% endfilter %}{{ macros.volume_image(volume_year - 1) }}{% filter markdown %}
-
-Podívejte se, [jak jsme si hráli v roce {{ volume_year - 1 }}]({{ url_for('history', year=(volume_year - 1)) }}).
-
+{% endfilter %}
+<a href="{{ url_for('history', year=(volume_year - 1)) }}">
+    {{ macros.volume_image(volume_year - 1) }}
+    Jak jsme si hráli v roce {{ volume_year - 1 }}
+</a>
+{% filter markdown %}
 
 {% endfilter %}{% endblock %}

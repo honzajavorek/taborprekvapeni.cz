@@ -24,7 +24,7 @@ class Image(object):
                 break
         exif = dict(image._getexif() or {})
 
-        if exif:
+        if orientation in exif:
             if exif[orientation] == 3:
                 image = image.rotate(180, expand=True)
             elif exif[orientation] == 6:

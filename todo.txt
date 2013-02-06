@@ -1,8 +1,8 @@
 
 Verze 1 k nahlednuti:
 
-- html zakladni styly ala wireframy
 - stranka s filozofii, programem
+- html zakladni styly ala wireframy
 
 Spusteni:
 
@@ -10,7 +10,7 @@ Spusteni:
 - texty k vedoucim
 - design
 - realign loga
-- predelat fotky z picasy na rajce
+- favicon
 - google analytics
 
 Na cem to nestoji:
@@ -19,7 +19,6 @@ Na cem to nestoji:
 - fotky vedoucich
 - vylepsit copywriting
 - video od lukase
-- repre fotky do historie k jednotlivym textum
 
 Vedlejsi veci:
 
