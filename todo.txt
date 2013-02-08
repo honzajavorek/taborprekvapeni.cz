@@ -1,6 +1,8 @@
 
 Spusteni:
 
+- xml feedy
+- chybi od kdy do kdy je tabor
 - fb tagy, description, keywords
 - texty k vedoucim
 - design
