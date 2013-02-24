@@ -2,7 +2,7 @@
 
 
 import times
-from flask import render_template, abort, request, send_file, Response
+from flask import render_template, abort, request, send_file
 
 from taborprekvapeni import app
 from taborprekvapeni.image import Image
@@ -117,9 +117,3 @@ def image_proxy():
     img.sharpen()
 
     return send_file(img.to_stream(), mimetype='image/jpeg')
-
-
-@app.route('/product_feed.xml')
-def product_feed():
-    return Response(render_template('product_feed.xml'),
-                    mimetype='text/xml')
