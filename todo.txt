@@ -3,21 +3,21 @@ Spusteni:
 
 - chybi od kdy do kdy je tabor
 - fb tagy, description, keywords
-- texty k vedoucim
-- design
-- realign loga
-- favicon
+- design, favicon
 - google analytics
 
 Na cem to nestoji:
 
+- realign loga
 - doplnit historii
 - fotky vedoucich
-- vylepsit copywriting
-- video od lukase
+    - kralik
+    - bara pekarkova
 
 Vedlejsi veci:
 
+- vylepsit copywriting
+- video od lukase
 - predelat diskusi
 - registrace do katalogů s tábory
     - http://www.detske-tabory.info/
