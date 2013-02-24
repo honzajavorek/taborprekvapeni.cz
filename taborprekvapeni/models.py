@@ -194,37 +194,48 @@ class TeamMemberText(unicode):
 
     _dir = os.path.join(app.root_path, 'texts', 'team')
 
-    def __new__(cls, slug_file):
+    def __new__(cls, basename):
+        order, slug_file = basename.split('_', 1)
+        slug_file = slug_file[:-3]  # name_surname.md
+
         # get the text
-        path = os.path.join(cls._dir, slug_file + '.md')
+        path = os.path.join(cls._dir, basename)
         text, meta = TextParser().parse(path)
 
         obj = unicode.__new__(cls, text)
 
         # set properties
+        obj.order = int(order)
         obj.full_name = obj.title = meta['title']
         obj.names = meta['title'].split()
         obj.nickname = meta.get('parentheses')
         obj.post = meta.get('square_brackets', u'vedoucí')
         obj.slug_url = slug_file.replace('_', '-')
         obj.slug_file = slug_file
+        obj.basename = basename
         return obj
 
     @classmethod
     def from_slug_url(cls, slug_url):
-        slug_file = slug_url.replace('-', '_')
-        return cls(slug_file)
+        return cls.from_slug_file(slug_url.replace('-', '_'))
+
+    @classmethod
+    def from_slug_file(cls, slug_file):
+        for basename in os.listdir(cls._dir):
+            order, name = basename.split('_', 1)
+            if name[:-3] == slug_file:  # name_surname.md
+                return cls(basename)
+        return None
 
     @classmethod
     def find_all(cls):
         texts = []
         for basename in os.listdir(cls._dir):
-            slug = basename[:-3]  # name_surname.md
-            text = cls(slug)
+            text = cls(basename)
             texts.append(text)
 
-        key_surname = lambda t: t.names[-1]
-        return sorted(texts, key=key_surname)
+        key_order = lambda t: t.order
+        return sorted(texts, key=key_order)
 
 
 class PhotoAlbums(dict):

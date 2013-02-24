@@ -107,31 +107,15 @@
 
 {% macro team_menu(texts) %}
     <ul class="team gallery">
-
     {% for text in texts %}
-        {% if text.post == 'hlavní vedoucí' %}
-            {{ member_item(
-                text.slug_file,
-                text.slug_url,
-                text.full_name,
-                text.nickname,
-                text.post
-            ) }}
-        {% endif %}
+        {{ member_item(
+            text.slug_file,
+            text.slug_url,
+            text.full_name,
+            text.nickname,
+            text.post
+        ) }}
     {% endfor %}
-
-    {% for text in texts %}
-        {% if text.post != 'hlavní vedoucí' %}
-            {{ member_item(
-                text.slug_file,
-                text.slug_url,
-                text.full_name,
-                text.nickname,
-                text.post
-            ) }}
-        {% endif %}
-    {% endfor %}
-
     </ul>
 {% endmacro %}
 
