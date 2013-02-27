@@ -36,6 +36,12 @@ def file_exists(filename):
 
 
 @app.template_filter()
+def date(dt):
+    d = dt.strftime('%d. %m.')
+    return re.sub(r'0+(\d+)', r'\1', d)
+
+
+@app.template_filter()
 def slugify(string, sep='_'):
     string = unidecode.unidecode(string).lower()
     return re.sub(r'\W+', sep, string)

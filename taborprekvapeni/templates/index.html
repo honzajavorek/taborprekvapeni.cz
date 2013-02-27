@@ -41,7 +41,11 @@ Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi 
   </ul>
 </div>
 
-<h2>Tábor {{ volume_year }} {% if not is_past %}začíná už za {{ countdown }} dní!{% endif %}</h2>
+<h2>
+    Tábor {{ volume_year }} {% if is_past %}byl{% else %}je{% endif %} v termínu
+    {{ info.senior.starts_at|date }} až {{ info.senior.ends_at|date }}
+    {% if not is_past %}&ndash; začíná už za {{ countdown }} dní!{% endif %}
+</h2>
 
 {{ macros.orders(info) }}
 

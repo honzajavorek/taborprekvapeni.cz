@@ -1,21 +1,14 @@
 
 Spusteni:
 
-- chybi od kdy do kdy je tabor
 - fb tagy, description, keywords
 - design, favicon
 - google analytics
-
-Na cem to nestoji:
-
-- realign loga
-- doplnit historii
-- fotky vedoucich
-    - kralik
-    - bara pekarkova
+- https://mail.google.com/mail/u/0/?shva=1#inbox/1352a5eec6ac41ca
 
 Vedlejsi veci:
 
+- realign loga
 - vylepsit copywriting
 - video od lukase
 - predelat diskusi

@@ -4,6 +4,7 @@
 import os
 import re
 import urllib
+import logging
 import datetime
 import itertools
 from lxml import html
@@ -231,8 +232,12 @@ class TeamMemberText(unicode):
     def find_all(cls):
         texts = []
         for basename in os.listdir(cls._dir):
-            text = cls(basename)
-            texts.append(text)
+            try:
+                text = cls(basename)
+                texts.append(text)
+            except:
+                logging.exception('Error in loading team member text: %s',
+                                  basename)
 
         key_order = lambda t: t.order
         return sorted(texts, key=key_order)

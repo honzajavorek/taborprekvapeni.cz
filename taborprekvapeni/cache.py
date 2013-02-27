@@ -43,7 +43,7 @@ def cache(key, fn, exp=None):
         logging.debug('Cache miss (%s).', original_key)
         result = fn()
 
-    except Exception:
+    except:
         logging.exception('Cache fallback (%s) due:', original_key)
 
         # fallback to eternal backup
