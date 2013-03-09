@@ -2,6 +2,14 @@
 {% extends 'base.html' %}
 
 
+{% block title %}{{ text.full_name|safe }}{% if text.nickname %} ({{ text.nickname|safe }}){% endif %} · {{ text.post }}{% endblock %}
+{% block description -%}
+    {{ text.post|safe|capitalize_first }} {{ text.full_name|safe }} {% if text.nickname %}({{ text.nickname|safe }}){% endif %}.
+    Fotografie a osobní profil.
+{%- endblock %}
+{% block keywords %}{{ text.post|safe }}, instruktor, instruktoři, fotka, fotografie, osobní profil, popis, životopis{% endblock %}
+
+
 {% block content %}
 
 <p class="back"><a href="{{ url_for('team') }}" class="button">Všichni vedoucí</a></p>

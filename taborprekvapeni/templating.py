@@ -3,10 +3,11 @@
 
 import re
 import os
+import lxml
 import unidecode
 from jinja2 import Markup
 from flask.ext.markdown import Markdown
-from flask import url_for as original_url_for
+from flask import url_for as original_url_for, request
 
 from taborprekvapeni import app, __version__ as version
 
@@ -54,3 +55,32 @@ def email(address):
               '{username}&#64;<!---->{server}</a>').format(username=username,
                                                            server=server)
     return Markup(markup)
+
+
+@app.template_filter()
+def extract_title(html):
+    try:
+        h1 = lxml.html.fromstring(html).xpath('//h1[1]')[0]
+        h1 = re.sub(r'\s+', ' ', h1.text_content()).strip()
+        return h1
+    except:
+        return ''
+
+
+@app.template_filter()
+def extract_image(html):
+    try:
+        img = lxml.html.fromstring(html).xpath('//img[1]')[0]
+        return request.url_root.rstrip('/') + img.get('src')
+    except:
+        return ''
+
+
+@app.template_filter()
+def split(string, sep):
+    return string.split(sep)
+
+
+@app.template_filter()
+def capitalize_first(string):
+    return string[0].upper() + string[1:]

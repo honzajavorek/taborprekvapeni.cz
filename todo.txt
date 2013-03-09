@@ -1,7 +1,6 @@
 
 Spusteni:
 
-- fb tagy, description, keywords
 - design, favicon
 - google analytics
 - https://mail.google.com/mail/u/0/?shva=1#inbox/1352a5eec6ac41ca

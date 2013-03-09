@@ -3,9 +3,22 @@
 <html lang="cs">
     <head>
         <meta charset="utf-8">
+        <meta property="og:type" content="website">
+
         <meta name="description" content="{% block description %}{% endblock %}">
+        <meta property="og:description" content="{{ self.description() }}">
         <meta name="keywords" content="{% block keywords %}{% endblock %}">
-        <title>{% block title %}Tábor plný překvapení - letní dětský tábor{% endblock %}</title>
+
+        <meta property="og:site_name" content="{% block site_name %}Tábor plný překvapení{% endblock %} · {% block claim %}letní dětský tábor{% endblock %}">
+        {% if request.path == url_for('index') %}
+            <title>{{ self.site_name() }} · {{ self.claim() }}</title>
+        {% else %}
+            <title>{{ self.title() }} · {{ self.site_name() }}</title>
+        {% endif %}
+
+        <meta property="og:title" content="{% block title %}{{ self.content()|extract_title }}{% endblock %}">
+        <meta property="og:image" content="{{ self.content()|extract_image }}">
+
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Domine&amp;subset=latin,latin-ext">
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     </head>
@@ -18,7 +31,7 @@
             </script>
 
             <p class="header">
-                <a href="{{ url_for('index') }}"><strong>Tábor plný překvapení</strong></a>
+                <a href="{{ url_for('index') }}"><strong>{{ self.site_name() }}</strong></a>
                 &ndash;
                 Letní tábor v Jižních Čechách pro děti od {{ info.junior.age_from }} do {{ info.senior.age_to }} let.
                 <hr>
