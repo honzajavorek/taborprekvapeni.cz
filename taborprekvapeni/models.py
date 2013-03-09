@@ -249,7 +249,11 @@ class PhotoAlbums(dict):
     _camp_re = re.compile(u't[áa]bor\D{0,3}(\d{4}|\d{2})', re.I)
 
     def __init__(self):
-        data = cache(self.__class__.__name__, self._fetch)
+        try:
+            data = cache(self.__class__.__name__, self._fetch)
+        except:
+            logging.exception('Error in loading photo albums.')
+            data = {}
         self.update(data)
 
     def _is_camp_specific(self, album):
