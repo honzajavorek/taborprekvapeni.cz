@@ -253,8 +253,7 @@ class PhotoAlbums(dict):
             data = cache(self.__class__.__name__, self._fetch)
         except:
             logging.exception('Error in loading photo albums.')
-            data = {}
-        self.update(data)
+        self.update(data or {})
 
     def _is_camp_specific(self, album):
         return bool(self._camp_re.search(album.text))
