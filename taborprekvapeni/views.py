@@ -6,9 +6,14 @@ import times
 from flask import (render_template, abort, request, send_file,
                    send_from_directory)
 
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
+
 from taborprekvapeni import app
 from taborprekvapeni.image import Image
-from taborprekvapeni.cache import cached
+from taborprekvapeni.cache import cache, cached
 from taborprekvapeni.templating import url_for, minified
 from taborprekvapeni.models import (BasicInfo, HistoryText, PhotoAlbums,
                                     TeamMemberText)
@@ -116,21 +121,25 @@ def history(year=None):
 
 @app.route('/image')
 def image_proxy():
-    url = request.args.get('url') or abort(404)
+    def generate_image():
+        url = request.args.get('url') or abort(404)
 
-    w, h = request.args.get('resize', 'x').split('x')
-    crop = request.args.get('crop')
+        w, h = request.args.get('resize', 'x').split('x')
+        crop = request.args.get('crop')
 
-    img = Image.from_url(url)
-    img.rotate()
+        img = Image.from_url(url)
+        img.rotate()
 
-    if crop:
-        img.crop(int(crop))
-    if w and h:
-        img.resize_crop(int(w), int(h))
-    img.sharpen()
+        if crop:
+            img.crop(int(crop))
+        if w and h:
+            img.resize_crop(int(w), int(h))
+        img.sharpen()
 
-    return send_file(img.to_stream(), mimetype='image/jpeg')
+        return img.to_stream().read()
+
+    bytes = cache(request.url, generate_image, eternal=False)
+    return send_file(StringIO(bytes), mimetype='image/jpeg')
 
 
 @app.route('/favicon.ico')

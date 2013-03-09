@@ -14,7 +14,7 @@ except ImportError:
 from taborprekvapeni import app, redis
 
 
-def cache(key, fn, exp=None):
+def cache(key, fn, exp=None, eternal=True):
     """Cache helper. Uses Redis.
 
     In case data are found in cache under *key*, they are
@@ -45,10 +45,10 @@ def cache(key, fn, exp=None):
 
     except:
         logging.exception('Cache fallback (%s) due:', original_key)
-
-        # fallback to eternal backup
-        result = redis.get(key_eternal)
-        return pickle.loads(result) if result else None
+        if eternal:
+            # fallback to eternal backup
+            result = redis.get(key_eternal)
+            return pickle.loads(result) if result else None
 
     # update cache
     if result:
@@ -56,7 +56,8 @@ def cache(key, fn, exp=None):
         pickled = pickle.dumps(result)
 
         redis.setex(key, exp, pickled)
-        redis.set(key_eternal, pickled)
+        if eternal:
+            redis.set(key_eternal, pickled)
 
     return result
 
