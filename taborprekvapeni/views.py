@@ -18,6 +18,12 @@ def redefine():
 
 
 @app.context_processor
+def inject_ga():
+    return {'ga_code': app.config['GA_CODE'],
+            'debug': app.debug}
+
+
+@app.context_processor
 def inject_info():
     info = BasicInfo()
 
