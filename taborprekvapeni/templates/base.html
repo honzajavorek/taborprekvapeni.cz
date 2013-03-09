@@ -22,6 +22,9 @@
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Domine&amp;subset=latin,latin-ext">
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 
+        <link rel="shortcut icon" href="{{ url_for('favicon') }}" type="image/x-icon">
+        <link rel="icon" href="{{ url_for('favicon') }}" type="image/x-icon">
+
         {% if not debug %}
         <script>
             var _gaq=_gaq||[];_gaq.push(['_setAccount', '{{ ga_code }}']);_gaq.push(['_trackPageview']);

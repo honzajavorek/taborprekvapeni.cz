@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 
+import os
 import times
-from flask import render_template, abort, request, send_file
+from flask import (render_template, abort, request, send_file,
+                   send_from_directory)
 
 from taborprekvapeni import app
 from taborprekvapeni.image import Image
@@ -123,3 +125,10 @@ def image_proxy():
     img.sharpen()
 
     return send_file(img.to_stream(), mimetype='image/jpeg')
+
+
+@app.route('/favicon.ico')
+def favicon():
+    static_dir = os.path.join(app.root_path, 'static')
+    return send_from_directory(static_dir, 'favicon.ico',
+                               mimetype='image/vnd.microsoft.icon')

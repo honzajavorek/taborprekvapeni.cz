@@ -14,7 +14,7 @@ from taborprekvapeni import app, __version__ as version
 
 def url_for(endpoint, **values):
     url = original_url_for(endpoint, **values)
-    if endpoint == 'static':
+    if endpoint in ['static', 'favicon']:
         sep = '&' if ('?' in url) else '?'
         url += '{0}v{1}'.format(sep, version)
     return url
