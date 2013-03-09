@@ -26,5 +26,6 @@ setup(
         'times==0.6',
         'pil==1.1.7',
         'unidecode==0.04.11',
+        'flask-gzip==0.1',
     ],
 )

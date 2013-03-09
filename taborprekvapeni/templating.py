@@ -6,10 +6,15 @@ import os
 import lxml
 import unidecode
 from jinja2 import Markup
+from functools import wraps
+from flask.ext.gzip import Gzip
 from flask.ext.markdown import Markdown
 from flask import url_for as original_url_for, request
 
 from taborprekvapeni import app, __version__ as version
+
+
+Gzip(app)
 
 
 def url_for(endpoint, **values):
@@ -28,6 +33,24 @@ def before_request():
     # instance of Markdown is created and registered
     # before each HTTP request.
     app.jinja_env.filters['markdown'] = md
+
+
+def minified(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        result = f(*args, **kwargs)
+        if not app.debug:
+            soup = lxml.html.fromstring(result)
+            for text in soup.xpath('//text()'):
+                if re.match(r'\s+$', text):  # is whitespace
+                    if text.is_tail:
+                        text.getparent().tail = ' '
+                    else:
+                        text.getparent().text = ' '
+            return lxml.html.tostring(soup, encoding='utf-8')
+        else:
+            return result
+    return decorated_function
 
 
 @app.template_filter()

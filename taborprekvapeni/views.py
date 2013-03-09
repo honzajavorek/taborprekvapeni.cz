@@ -9,7 +9,7 @@ from flask import (render_template, abort, request, send_file,
 from taborprekvapeni import app
 from taborprekvapeni.image import Image
 from taborprekvapeni.cache import cached
-from taborprekvapeni.templating import url_for
+from taborprekvapeni.templating import url_for, minified
 from taborprekvapeni.models import (BasicInfo, HistoryText, PhotoAlbums,
                                     TeamMemberText)
 
@@ -44,24 +44,28 @@ def inject_info():
 
 @app.route('/')
 @cached()
+@minified
 def index():
     return render_template('index.html')
 
 
 @app.route('/filozofie-napln')
 @cached()
+@minified
 def program():
     return render_template('program.html')
 
 
 @app.route('/informace')
 @cached()
+@minified
 def info():
     return render_template('info.html')
 
 
 @app.route('/kontakty')
 @cached()
+@minified
 def contact():
     return render_template('contact.html')
 
@@ -69,6 +73,7 @@ def contact():
 @app.route('/tym-vedoucich/<slug_url>')
 @app.route('/tym-vedoucich')
 @cached()
+@minified
 def team(slug_url=None):
     all_texts = TeamMemberText.find_all()
 
@@ -84,6 +89,7 @@ def team(slug_url=None):
 @app.route('/historie-fotky/<int:year>')
 @app.route('/historie-fotky')
 @cached()
+@minified
 def history(year=None):
     all_texts = HistoryText.find_all()
 
