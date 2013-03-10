@@ -19,7 +19,7 @@ def redefine():
 
 
 @app.context_processor
-def inject_ga():
+def inject_config():
     return {'ga_code': app.config['GA_CODE'],
             'debug': app.debug}
 
