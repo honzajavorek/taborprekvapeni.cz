@@ -15,9 +15,7 @@ LOGGING = {
     'level': logging.DEBUG,
 }
 
-REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
-REDIS_MAX_CONNECTIONS = 10
-
+CACHE_URL = os.getenv('MONGOLAB_URI', 'mongodb://localhost:27017')
 CACHE_EXPIRATION = 604800  # 1 week in seconds
 SEND_FILE_MAX_AGE_DEFAULT = 157680000  # 5 years in seconds
 

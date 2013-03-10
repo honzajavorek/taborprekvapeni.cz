@@ -138,7 +138,7 @@ def image_proxy():
 
         return img.to_stream().read()
 
-    bytes = cache(request.url, generate_image, eternal=False)
+    bytes = cache(request.url, generate_image)
     return send_file(StringIO(bytes), mimetype='image/jpeg')
 
 

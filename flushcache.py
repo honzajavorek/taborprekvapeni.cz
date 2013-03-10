@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from taborprekvapeni.cache import redis
+from taborprekvapeni.cache import mongo
 
 
-redis.flushdb()
+mongo.drop_database('taborprekvapeni')

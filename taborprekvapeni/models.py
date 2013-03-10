@@ -36,7 +36,7 @@ class BasicInfo(dict):
 
     def __init__(self):
         data = cache(self.__class__.__name__, self._fetch)
-        self.update(data)
+        self.update(data or {})
 
     def _fetch(self):
         return self._parse(http.get(self._url))

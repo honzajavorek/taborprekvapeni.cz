@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
+import times
 import logging
+import pymongo
 from hashlib import sha1
 from flask import request
 from functools import wraps
-from urlparse import urlparse
-from redis import StrictRedis, ConnectionPool
+from bson.binary import Binary
 
 try:
     import cPickle as pickle
@@ -16,24 +17,15 @@ except ImportError:
 from taborprekvapeni import app
 
 
-def connect(app):
-    url = urlparse(app.config['REDIS_URL'])
-    max_connections = app.config['REDIS_MAX_CONNECTIONS']
-
-    try:
-        db = int(url.path.replace('/', ''))
-    except (AttributeError, ValueError):
-        db = 0
-
-    pool = ConnectionPool(host=url.hostname, password=url.password, db=db,
-                          port=url.port, max_connections=max_connections)
-    return StrictRedis(connection_pool=pool)
+mongo = pymongo.MongoClient(host=app.config['CACHE_URL'])
 
 
-redis = connect(app)
+storage = mongo.taborprekvapeni.cache
+storage.ensure_index('at', expire_after_seconds=app.config['CACHE_EXPIRATION'])
+eternal_storage = mongo.taborprekvapeni.eternal_cache
 
 
-def cache(key, fn, exp=None, eternal=True):
+def cache(key, fn, exp=None):
     """Cache helper. Uses Redis.
 
     In case data are found in cache under *key*, they are
@@ -47,15 +39,15 @@ def cache(key, fn, exp=None, eternal=True):
     miss ever was successful. No future irregular errors
     affect the eternal data. Exceptions are logged.
     """
+
     original_key = key
     key = sha1(original_key).hexdigest()
-    key_eternal = key + '.eternal'
 
     # cache hit
-    result = redis.get(key)
+    result = storage.find_one({'_id': key})
     if result:
         logging.debug('Cache hit (%s).', original_key)
-        return pickle.loads(result)
+        return pickle.loads(result['val'])
 
     # cache miss
     try:
@@ -64,19 +56,16 @@ def cache(key, fn, exp=None, eternal=True):
 
     except:
         logging.exception('Cache fallback (%s) due:', original_key)
-        if eternal:
-            # fallback to eternal backup
-            result = redis.get(key_eternal)
-            return pickle.loads(result) if result else None
+
+        # fallback to eternal backup
+        result = eternal_storage.find_one({'_id': key})
+        return pickle.loads(result['val']) if result else None
 
     # update cache
     if result:
-        exp = exp or app.config['CACHE_EXPIRATION']
-        pickled = pickle.dumps(result)
-
-        redis.setex(key, exp, pickled)
-        if eternal:
-            redis.set(key_eternal, pickled)
+        pickled = Binary(pickle.dumps(result))
+        storage.insert({'_id': key, 'val': pickled, 'at': times.now()})
+        eternal_storage.insert({'_id': key, 'val': pickled})
 
     return result
 
