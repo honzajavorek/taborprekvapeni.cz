@@ -3,4 +3,6 @@
 
 
 from taborprekvapeni import redis
+
+
 redis.flushdb()
