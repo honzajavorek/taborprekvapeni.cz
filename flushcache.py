@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from taborprekvapeni import redis
+from taborprekvapeni.cache import redis
 
 
 redis.flushdb()

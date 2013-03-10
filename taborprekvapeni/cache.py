@@ -5,13 +5,32 @@ import logging
 from hashlib import sha1
 from flask import request
 from functools import wraps
+from urlparse import urlparse
+from redis import StrictRedis, ConnectionPool
 
 try:
     import cPickle as pickle
 except ImportError:
     import pickle as pickle
 
-from taborprekvapeni import app, redis
+from taborprekvapeni import app
+
+
+def connect(app):
+    url = urlparse(app.config['REDIS_URL'])
+    max_connections = app.config['REDIS_MAX_CONNECTIONS']
+
+    try:
+        db = int(url.path.replace('/', ''))
+    except (AttributeError, ValueError):
+        db = 0
+
+    pool = ConnectionPool(host=url.hostname, password=url.password, db=db,
+                          port=url.port, max_connections=max_connections)
+    return StrictRedis(connection_pool=pool)
+
+
+redis = connect(app)
 
 
 def cache(key, fn, exp=None, eternal=True):
