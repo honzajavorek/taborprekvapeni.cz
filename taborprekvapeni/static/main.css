@@ -243,3 +243,8 @@ dd {
 .fb-like-box {
     height: 260px;
 }
+
+.call_to_action {
+    border-top: 1px solid #000;
+    padding: 4em 0 1em 0;
+}

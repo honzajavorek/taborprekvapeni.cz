@@ -42,7 +42,6 @@ def inject_info():
 
 
 @app.route('/')
-@cached
 @minified
 def index():
     members = list(TeamMemberText.find_all())
