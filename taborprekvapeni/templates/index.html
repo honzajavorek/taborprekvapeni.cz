@@ -2,13 +2,23 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="lead" style="text-align: center; padding-bottom: 2em;">
 <h1>Ahoj!</h1>
 
-<div class="lead">
+<div style="font-size: 150%;">
 {% filter markdown %}
 Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi běhali po lese, stavěli ze dřeva, vymýšleli a luštili šifry, převlékali se do masek a poskakovali na diskotéce. Baví nás to už {{ volume_no }} let.
 {% endfilter %}
 </div>
+</div>
+
+<h2>
+    Tábor {{ volume_year }} {% if is_past %}byl{% else %}je{% endif %} v termínu
+    {{ info.senior.starts_at|date }} až {{ info.senior.ends_at|date }}
+    {% if not is_past %}&ndash; začíná už za {{ countdown }} dní!{% endif %}
+</h2>
+
+{{ macros.orders(info) }}
 
 <div class="motivation">
     <h2>Proč jet s námi?</h2>
@@ -29,6 +39,11 @@ Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi 
             <a href="{{ url_for('program') }}" class="button">Více o programu</a>
         </li>
         <li>
+            {% filter markdown %}Díky **tradici** se můžeme poučit z minulosti. {{ volume_no }} let si hromadíme a předáváme **společné know-how** jak s dětmi pracovat, které hry se povedly, jaká opatření se osvědčila a na co si dát příště pozor.{% endfilter %}
+
+            <a href="{{ url_for('history') }}" class="button">Zápisky z historie</a>
+        </li>
+        <li>
             {% filter markdown %}Základnu máme v rekreačním středisku uprostřed lesů v malebném údolí nedaleko Zvíkovského Podhradí. Děti bydlí v **chatkách nebo stanech s podsadou**, k dispozici mají v hlavní budově **normální WC a sprchy s teplou vodou**. Jídelna zajišťuje **stravu 5&times; denně**. V areálu je prostor pro míčové hry, ráchání v přírodním koupališti, táboráky.{% endfilter %}
 
             <a href="{{ url_for('info') }}" class="button">Vše o místě konání</a>
@@ -41,13 +56,6 @@ Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi 
   </ul>
 </div>
 
-<h2>
-    Tábor {{ volume_year }} {% if is_past %}byl{% else %}je{% endif %} v termínu
-    {{ info.senior.starts_at|date }} až {{ info.senior.ends_at|date }}
-    {% if not is_past %}&ndash; začíná už za {{ countdown }} dní!{% endif %}
-</h2>
-
-{{ macros.orders(info) }}
 
 <div class="references">
     <div class="reference testimonials">
@@ -65,6 +73,17 @@ Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi 
                 Jak jsme si hráli v roce {{ volume_year - 1 }}
             </a>
         </p>
+    </div>
+    <div class="reference fb">
+        <h2>Facebook</h2>
+        <div class="fb-like-box"
+            data-href="http://www.facebook.com/taborprekvapeni"
+            data-width="292"
+            data-show-faces="true"
+            data-stream="false"
+            data-border-color="#FFF"
+            data-header="false">
+        </div>
     </div>
 </div>
 {% endblock %}

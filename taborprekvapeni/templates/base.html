@@ -4,6 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta property="og:type" content="website">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <meta name="description" content="{% block description %}{{ self.subtitle() }}{% endblock %}">
         <meta property="og:description" content="{{ self.description() }}">
@@ -82,29 +83,19 @@
                 <hr>
             </div>
 
-            <div class="fb">
-                <h2>Stránka na Facebooku</h2>
-                <div class="fb-like-box"
-                    data-href="http://www.facebook.com/taborprekvapeni"
-                    data-width="292"
-                    data-show-faces="true"
-                    data-stream="false"
-                    data-border-color="#FFF"
-                    data-header="false">
-                </div>
-                <div class="fb-like"
-                    data-href="http://www.facebook.com/taborprekvapeni"
-                    data-send="false"
-                    data-width="450"
-                    data-show-faces="true">
-                </div>
-                <hr>
-            </div>
-
             <p class="footer">
                 <small><strong>Tábor plný překvapení</strong> je značka, pod kterou od roku 2004 vystupuje parta vedoucích v čele s Pavlem Gálem.
                 Provozovatelem tábora je <a href="http://www.tabory.cz">CK Topinka</a>.</small>
             </p>
+
+            <div class="fb_like">
+                <div class="fb-like"
+                    data-layout="button_count"
+                    data-href="http://www.facebook.com/taborprekvapeni"
+                    data-send="false"
+                    data-width="450">
+                </div>
+            </div>
         </div>
     </body>
 </html>

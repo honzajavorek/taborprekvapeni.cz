@@ -80,12 +80,21 @@ ul.gallery, .gallery li, .nav ul, .nav li {
     -khtml-border-radius: 5px;
 }
 
+.fb_like {
+    position: absolute; left: 0; top: 80px;
+}
+
+#index .nav {
+    position: static;
+    border: none;
+}
+
 .nav li {
     display: inline;
     margin: 0 0.5em;
 }
 
-hr, .nav h2, .fb h2 {
+hr, .nav h2 {
     display: none;
 }
 
@@ -110,7 +119,7 @@ hr, .nav h2, .fb h2 {
 .references { *zoom: 1; }
 
 .reference {
-    width: 50%;
+    width: 33%;
     float: left;
 }
 
@@ -131,7 +140,7 @@ dd {
     font-style: italic;
 }
 
-.footer, .fb, .subnav h2 {
+.footer, .subnav h2 {
     border-top: 1px solid #000;
     margin: 4em 0 2em 0; padding: 1em 0;
 }
