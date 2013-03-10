@@ -31,6 +31,9 @@ Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi 
         <li>
             {% filter markdown %}Tým vedoucích je **sehraná parta lidí**, která tábor připravuje několik měsíců před jeho začátkem. [Pavel Gál]({{ url_for('team', slug_url='pavel-gal') }}) je **zkušený hlavní vedoucí**, na tábory jezdí už {{ volume_year - 1980 }} let. Součástí týmu je samozřejmě také zdravotnice.{% endfilter %}
 
+            {% set members = members|members_showcase %}
+            {{ macros.team_menu(members) }}
+
             <a href="{{ url_for('team') }}" class="button">Vše o vedoucích</a>
         </li>
         <li>

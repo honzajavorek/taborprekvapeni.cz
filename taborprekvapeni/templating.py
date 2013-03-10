@@ -4,6 +4,7 @@
 import re
 import os
 import lxml
+import random
 import unidecode
 from jinja2 import Markup
 from functools import wraps
@@ -107,3 +108,8 @@ def split(string, sep):
 @app.template_filter()
 def capitalize_first(string):
     return string[0].upper() + string[1:]
+
+
+@app.template_filter()
+def members_showcase(members, n=5):
+    return members[:5] + random.sample(members[5:], n)

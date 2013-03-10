@@ -45,7 +45,8 @@ def inject_info():
 @cached
 @minified
 def index():
-    return render_template('index.html')
+    members = list(TeamMemberText.find_all())
+    return render_template('index.html', members=members)
 
 
 @app.route('/filozofie-napln')
