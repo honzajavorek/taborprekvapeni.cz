@@ -2,12 +2,17 @@
 
 
 import requests
+from hashlib import sha1
+from functools import wraps
+from flask import send_file, request
 from PIL import Image as PILImage, ExifTags, ImageEnhance
 
 try:
     from cStringIO import StringIO
 except ImportError:
     from StringIO import StringIO
+
+from taborprekvapeni.cache import cache
 
 
 class Image(object):
@@ -80,3 +85,19 @@ class Image(object):
         response = requests.get(url)
         response.raise_for_status()
         return cls(StringIO(response.content))
+
+
+def generated_image(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        def generate_image():
+            stream = f(*args, **kwargs)
+            return stream.read()
+        bytes = cache(request.url, generate_image)
+
+        response = send_file(StringIO(bytes), mimetype='image/jpeg')
+        response.set_etag(sha1(bytes).hexdigest())
+        response.make_conditional(request)
+        return response
+
+    return decorated_function

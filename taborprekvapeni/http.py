@@ -26,6 +26,6 @@ def get(url):
             except ConnectionError:  # unreliable Heroku
                 if attempt > 5:
                     raise
-                # else retry
+                # else retry...
 
     return cache(url, request)

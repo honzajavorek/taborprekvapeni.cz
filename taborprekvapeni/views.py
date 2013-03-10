@@ -3,17 +3,11 @@
 
 import os
 import times
-from flask import (render_template, abort, request, send_file,
-                   send_from_directory)
-
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from flask import render_template, abort, request, send_from_directory
 
 from taborprekvapeni import app
-from taborprekvapeni.image import Image
-from taborprekvapeni.cache import cache, cached
+from taborprekvapeni.cache import cached
+from taborprekvapeni.image import Image, generated_image
 from taborprekvapeni.templating import url_for, minified
 from taborprekvapeni.models import (BasicInfo, HistoryText, PhotoAlbums,
                                     TeamMemberText)
@@ -48,28 +42,28 @@ def inject_info():
 
 
 @app.route('/')
-@cached()
+@cached
 @minified
 def index():
     return render_template('index.html')
 
 
 @app.route('/filozofie-napln')
-@cached()
+@cached
 @minified
 def program():
     return render_template('program.html')
 
 
 @app.route('/informace')
-@cached()
+@cached
 @minified
 def info():
     return render_template('info.html')
 
 
 @app.route('/kontakty')
-@cached()
+@cached
 @minified
 def contact():
     return render_template('contact.html')
@@ -77,7 +71,7 @@ def contact():
 
 @app.route('/tym-vedoucich/<slug_url>')
 @app.route('/tym-vedoucich')
-@cached()
+@cached
 @minified
 def team(slug_url=None):
     all_texts = TeamMemberText.find_all()
@@ -93,7 +87,7 @@ def team(slug_url=None):
 
 @app.route('/historie-fotky/<int:year>')
 @app.route('/historie-fotky')
-@cached()
+@cached
 @minified
 def history(year=None):
     all_texts = HistoryText.find_all()
@@ -120,26 +114,23 @@ def history(year=None):
 
 
 @app.route('/image')
+@generated_image
 def image_proxy():
-    def generate_image():
-        url = request.args.get('url') or abort(404)
+    url = request.args.get('url') or abort(404)
 
-        w, h = request.args.get('resize', 'x').split('x')
-        crop = request.args.get('crop')
+    w, h = request.args.get('resize', 'x').split('x')
+    crop = request.args.get('crop')
 
-        img = Image.from_url(url)
-        img.rotate()
+    img = Image.from_url(url)
+    img.rotate()
 
-        if crop:
-            img.crop(int(crop))
-        if w and h:
-            img.resize_crop(int(w), int(h))
-        img.sharpen()
+    if crop:
+        img.crop(int(crop))
+    if w and h:
+        img.resize_crop(int(w), int(h))
+    img.sharpen()
 
-        return img.to_stream().read()
-
-    bytes = cache(request.url, generate_image)
-    return send_file(StringIO(bytes), mimetype='image/jpeg')
+    return img.to_stream()
 
 
 @app.route('/favicon.ico')
