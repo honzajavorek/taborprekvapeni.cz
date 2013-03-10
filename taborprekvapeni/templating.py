@@ -49,7 +49,7 @@ def minified(f):
                         text.getparent().text = ' '
             return lxml.html.tostring(soup, encoding='utf-8')
         else:
-            return result
+            return result.encode('utf-8')
     return decorated_function
 
 

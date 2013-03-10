@@ -77,10 +77,14 @@ def cached(f):
         else:
             content = f(*args, **kwargs)
 
+        if isinstance(content, unicode):
+            bytes = content.encode('utf-8')
+        else:
+            bytes = str(content)
+        etag = sha1(bytes).hexdigest()
+
         response = make_response(content)
-        print repr(content)
-        bytes = unicode(content).encode('utf-8')
-        response.set_etag(sha1(bytes).hexdigest())
+        response.set_etag(etag)
         response.make_conditional(request)
         return response
 
