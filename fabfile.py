@@ -79,9 +79,9 @@ def deploy():
     local('git tag {0}'.format(tag))
     local('git push --tags origin {0}:master'.format(branch))
 
-    # redis to go
-    if 'REDISTOGO_URL' not in capture('heroku config | grep REDISTOGO_URL'):
-        local('heroku addons:add redistogo')
+    # mongodb
+    if 'MONGOLAB_URI' not in capture('heroku config | grep MONGOLAB_URI'):
+        local('heroku addons:add mongolab:starter')
 
     # push to Heroku
     local('git push heroku {0}:master'.format(branch))
