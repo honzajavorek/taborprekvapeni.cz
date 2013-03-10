@@ -6,4 +6,3 @@ from taborprekvapeni.cache import db
 
 
 db.cache.drop()
-db.eternal_cache.drop()
