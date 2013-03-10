@@ -7,7 +7,6 @@
     {{ text.post|safe|capitalize_first }} {{ text.full_name|safe }} {% if text.nickname %}({{ text.nickname|safe }}){% endif %}.
     Fotografie a osobní profil.
 {%- endblock %}
-{% block keywords %}{{ text.post|safe }}, instruktor, instruktoři, fotka, fotografie, osobní profil, popis, životopis{% endblock %}
 
 
 {% block content %}

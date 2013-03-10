@@ -5,9 +5,8 @@
         <meta charset="utf-8">
         <meta property="og:type" content="website">
 
-        <meta name="description" content="{% block description %}{% endblock %}">
+        <meta name="description" content="{% block description %}{{ self.subtitle() }}{% endblock %}">
         <meta property="og:description" content="{{ self.description() }}">
-        <meta name="keywords" content="{% block keywords %}{% endblock %}">
 
         <meta property="og:site_name" content="{% block site_name %}Tábor plný překvapení{% endblock %} · {% block claim %}letní dětský tábor{% endblock %}">
         {% if request.path == url_for('index') %}
@@ -44,7 +43,9 @@
             <p class="header">
                 <a href="{{ url_for('index') }}"><strong>{{ self.site_name() }}</strong></a>
                 &ndash;
-                Letní tábor v Jižních Čechách pro děti od {{ info.junior.age_from }} do {{ info.senior.age_to }} let.
+                {% block subtitle -%}
+                    Letní tábor v Jižních Čechách pro děti od {{ info.junior.age_from }} do {{ info.senior.age_to }} let.
+                {%- endblock %}
                 <hr>
             </p>
 
