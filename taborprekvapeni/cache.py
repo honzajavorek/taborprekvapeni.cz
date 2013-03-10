@@ -78,6 +78,7 @@ def cached(f):
             content = f(*args, **kwargs)
 
         response = make_response(content)
+        print repr(content)
         bytes = unicode(content).encode('utf-8')
         response.set_etag(sha1(bytes).hexdigest())
         response.make_conditional(request)
