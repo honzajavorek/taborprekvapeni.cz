@@ -62,9 +62,12 @@ def cache(key, fn, exp=None):
 
     # update cache
     if result:
-        pickled = Binary(pickle.dumps(result))
-        db.cache.insert({'_id': key, 'val': pickled, 'at': times.now()})
-        db.eternal_cache.insert({'_id': key, 'val': pickled})
+        data = {'_id': key,
+                'val': Binary(pickle.dumps(result)),
+                'at': times.now()}
+        db.cache.update(data, upsert=True)
+        del data['at']
+        db.eternal_cache.update(data, upsert=True)
 
     return result
 
