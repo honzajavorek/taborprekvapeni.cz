@@ -17,12 +17,11 @@ except ImportError:
 from taborprekvapeni import app
 
 
-mongo = pymongo.MongoClient(host=app.config['CACHE_URL'])
+mongo = pymongo.MongoClient(app.config['MONGO_URL'])
+db = mongo[app.config['MONGO_DB']]
 
-
-storage = mongo.taborprekvapeni.cache
-storage.ensure_index('at', expire_after_seconds=app.config['CACHE_EXPIRATION'])
-eternal_storage = mongo.taborprekvapeni.eternal_cache
+db.cache.ensure_index('at',
+                      expire_after_seconds=app.config['CACHE_EXPIRATION'])
 
 
 def cache(key, fn, exp=None):
@@ -44,7 +43,7 @@ def cache(key, fn, exp=None):
     key = sha1(original_key).hexdigest()
 
     # cache hit
-    result = storage.find_one({'_id': key})
+    result = db.cache.find_one({'_id': key})
     if result:
         logging.debug('Cache hit (%s).', original_key)
         return pickle.loads(result['val'])
@@ -58,14 +57,14 @@ def cache(key, fn, exp=None):
         logging.exception('Cache fallback (%s) due:', original_key)
 
         # fallback to eternal backup
-        result = eternal_storage.find_one({'_id': key})
+        result = db.eternal_cache.find_one({'_id': key})
         return pickle.loads(result['val']) if result else None
 
     # update cache
     if result:
         pickled = Binary(pickle.dumps(result))
-        storage.insert({'_id': key, 'val': pickled, 'at': times.now()})
-        eternal_storage.insert({'_id': key, 'val': pickled})
+        db.cache.insert({'_id': key, 'val': pickled, 'at': times.now()})
+        db.eternal_cache.insert({'_id': key, 'val': pickled})
 
     return result
 

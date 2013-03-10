@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
-from taborprekvapeni.cache import mongo
+from taborprekvapeni.cache import db
 
 
-mongo.drop_database('taborprekvapeni')
+db.cache.drop()
+db.eternal_cache.drop()

@@ -3,6 +3,7 @@
 
 import os
 import logging
+from urlparse import urlparse
 
 
 MARKDOWN = {
@@ -15,7 +16,9 @@ LOGGING = {
     'level': logging.DEBUG,
 }
 
-CACHE_URL = os.getenv('MONGOLAB_URI', 'mongodb://localhost:27017')
+MONGO_URL = os.getenv('MONGOLAB_URI', 'mongodb://localhost:27017')
+MONGO_DB = urlparse(MONGO_URL).path.replace('/', '') or 'taborprekvapeni'
+
 CACHE_EXPIRATION = 604800  # 1 week in seconds
 SEND_FILE_MAX_AGE_DEFAULT = 157680000  # 5 years in seconds
 
