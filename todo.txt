@@ -1,9 +1,19 @@
 
 Spusteni:
 
-- lepsi wireframy, hlavne homepage
+- lepsi wireframy, hlavne homepage, bootstrap?
 - logo, design
 - copywriting (hh?)
+
+Barvy:
+
+http://www.colourlovers.com/palette/1037535/Tell_Me_Im_Dreaming
+http://www.colourlovers.com/palette/112840/GrowHow
+http://www.colourlovers.com/palette/593041/The_Bosque
+http://www.colourlovers.com/palette/1395410/Cat_Magick
+http://www.colourlovers.com/palette/1915577/Forest_spirits
+http://www.colourlovers.com/palette/91155/Forest_of_Nostgaard
+http://www.colourlovers.com/palette/723922/Morning_Gloom
 
 Vedlejsi veci:
 
