@@ -23,7 +23,7 @@
 
 {% if text %}
     <div class="text">
-        {{ macros.member_image(text.slug_file) }}
+        {{ macros.member_image(text.slug) }}
         {{ text|markdown }}
     </div>
 {% endif %}

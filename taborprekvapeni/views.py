@@ -2,31 +2,29 @@
 
 
 import os
+from hashlib import sha1
+from StringIO import StringIO
+from collections import OrderedDict
+
 import times
-from flask import render_template, abort, request, send_from_directory
+from flask import (render_template, abort, request, send_from_directory,
+                   send_file)
 
-from taborprekvapeni import app
-from taborprekvapeni.cache import cached
-from taborprekvapeni.image import Image, generated_image
-from taborprekvapeni.templating import url_for, minified
-from taborprekvapeni.models import (BasicInfo, HistoryText, PhotoAlbums,
-                                    TeamMemberText)
-
-
-@app.context_processor
-def redefine():
-    return {'url_for': url_for}
+from . import app, cache
+from .models import BasicInfo, TeamMemberText, HistoryText, PhotoAlbums, Photo
 
 
 @app.context_processor
 def inject_config():
-    return {'ga_code': app.config['GA_CODE'],
-            'debug': app.debug}
+    return {
+        'ga_code': app.config['GA_CODE'],
+        'debug': app.debug,
+    }
 
 
 @app.context_processor
 def inject_info():
-    info = BasicInfo()
+    info = cache.cached_call('basic-info', BasicInfo)
 
     now = times.to_local(times.now(), 'Europe/Prague')
     starts_at = info['senior']['starts_at']
@@ -42,69 +40,62 @@ def inject_info():
 
 
 @app.route('/')
-@minified
+@cache.cached_view()
 def index():
-    members = list(TeamMemberText.find_all())
+    members = list(TeamMemberText.all())
     return render_template('index.html', members=members)
 
 
 @app.route('/filozofie-napln')
-@cached
-@minified
+@cache.cached_view()
 def program():
     return render_template('program.html')
 
 
 @app.route('/informace')
-@cached
-@minified
+@cache.cached_view()
 def info():
     return render_template('info.html')
 
 
 @app.route('/kontakty')
-@cached
-@minified
+@cache.cached_view()
 def contact():
     return render_template('contact.html')
 
 
-@app.route('/tym-vedoucich/<slug_url>')
+@app.route('/tym-vedoucich/<slug>')
 @app.route('/tym-vedoucich')
-@cached
-@minified
-def team(slug_url=None):
-    all_texts = TeamMemberText.find_all()
+@cache.cached_view()
+def team(slug=None):
+    all_texts = TeamMemberText.all()
 
-    if not slug_url:
+    if not slug:
         # index page with listing
         return render_template('team.html', all_texts=all_texts)
 
-    text = TeamMemberText.from_slug_url(slug_url) or abort(404)
+    text = TeamMemberText.from_slug(slug) or abort(404)
     return render_template('team_detail.html', text=text,
                            all_texts=all_texts)
 
 
 @app.route('/historie-fotky/<int:year>')
 @app.route('/historie-fotky')
-@cached
-@minified
+@cache.cached_view()
 def history(year=None):
-    all_texts = HistoryText.find_all()
+    all_albums = OrderedDict(cache.cached_call('photo-albums', PhotoAlbums))
+    all_texts = HistoryText.all()
 
     if not year:
         # index page with listing
         return render_template('history.html', all_texts=all_texts)
 
-    all_albums = PhotoAlbums()
     text = HistoryText(year)
     albums = all_albums.get(year, [])
 
     has_content = any([
-        # has non-empty text
-        text,
-        # has essential attributes and albums
-        text.title and text.place and all_albums.get(year),
+        text,  # has non-empty text
+        text.title and text.place and albums,  # has essential attributes
     ])
 
     if not has_content:
@@ -114,27 +105,29 @@ def history(year=None):
 
 
 @app.route('/image')
-@generated_image
+@cache.cached_view(key='view/{request.path}{request.args[url]}')
 def image_proxy():
+    # params
     url = request.args.get('url') or abort(404)
-
-    w, h = request.args.get('resize', 'x').split('x')
+    resize = request.args.get('resize')
+    if resize:
+        width, height = resize.split('x')
+        if width and height:
+            resize = (int(width), int(height))
     crop = request.args.get('crop')
 
-    img = Image.from_url(url)
-    img.rotate()
+    # get photo's bytes
+    photo = Photo(url, crop=crop, resize=resize)
 
-    if crop:
-        img.crop(int(crop))
-    if w and h:
-        img.resize_crop(int(w), int(h))
-    img.sharpen()
-
-    return img.to_stream()
+    # build response
+    response = send_file(StringIO(photo), mimetype='image/jpeg')
+    response.set_etag(sha1(photo).hexdigest())
+    response.make_conditional(request)
+    return response
 
 
 @app.route('/favicon.ico')
 def favicon():
     static_dir = os.path.join(app.root_path, 'static')
-    return send_from_directory(static_dir, 'favicon.ico',
-                               mimetype='image/vnd.microsoft.icon')
+    mimetype = 'image/vnd.microsoft.icon'
+    return send_from_directory(static_dir, 'favicon.ico', mimetype=mimetype)

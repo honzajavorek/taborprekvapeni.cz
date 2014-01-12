@@ -1,94 +1,69 @@
 # -*- coding: utf-8 -*-
 
 
-import times
-import logging
-import pymongo
 from hashlib import sha1
 from functools import wraps
-from bson.binary import Binary
+
 from flask import request, make_response
-
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle as pickle
-
-from taborprekvapeni import app
+from werkzeug.contrib.cache import FileSystemCache, NullCache
 
 
-mongo = pymongo.MongoClient(app.config['MONGO_URL'])
-db = mongo[app.config['MONGO_DB']]
+class Cache(FileSystemCache):
+    """Simple file system cache."""
 
-db.cache.ensure_index('at',
-                      expire_after_seconds=app.config['CACHE_EXPIRATION'])
+    def __init__(self, app):
+        super(Cache, self).__init__(
+            app.config['CACHE_DIR'],
+            default_timeout=app.config['CACHE_DEFAULT_TIMEOUT']
+        )
 
+    def cached_view(self, key='view/{request.path}', timeout=None):
+        """View decorator."""
+        timeout = timeout or self.default_timeout
 
-def cache(key, fn, exp=None):
-    """Cache helper. Uses Redis.
+        def decorator(f):
+            @wraps(f)
+            def decorated_view(*args, **kwargs):
+                cache_key = key.format(request=request)
 
-    In case data are found in cache under *key*, they are
-    immediately returned. If nothing is under *key*, *fn*
-    is called to provide the data. Those are then stored
-    to cache twice - once with expiration, once eternally.
+                response = self.get(cache_key)
+                if response is not None:
+                    return response.make_conditional(request)  # send HTTP 304
 
-    The eternal version of data is used in case an error
-    occures during *fn* execution. That means, invalid or
-    empty data should never be returned if the first cache
-    miss ever was successful. No future irregular errors
-    affect the eternal data. Exceptions are logged.
-    """
+                rv = f(*args, **kwargs)
+                response = make_response(rv)
 
-    original_key = key
-    key = sha1(original_key).hexdigest()
+                if isinstance(rv, unicode):  # ensure HTTP 304 for strings
+                    response.set_etag(sha1(rv.encode('utf-8')).hexdigest())
 
-    # cache hit
-    result = db.cache.find_one({'_id': key})
-    if result:
-        logging.debug('Cache hit (%s).', original_key)
-        return pickle.loads(result['val'])
+                response.freeze()
+                self.set(cache_key, response, timeout=timeout)
 
-    # cache miss
-    try:
-        logging.debug('Cache miss (%s).', original_key)
-        result = fn()
+                return response
+            return decorated_view
+        return decorator
 
-    except:
-        logging.exception('Cache fallback (%s) due:', original_key)
+    def cached_call(self, key, call, timeout=None):
+        timeout = timeout or self.default_timeout
 
-        # fallback to eternal backup
-        result = db.eternal_cache.find_one({'_id': key})
-        return pickle.loads(result['val']) if result else None
+        value = self.get(key)
+        if value is not None:
+            return value
 
-    # update cache
-    if result:
-        val = Binary(pickle.dumps(result))
-        at = times.now()
-        db.cache.update({'_id': key},
-                        {'_id': key, 'val': val, 'at': at}, upsert=True)
-        db.eternal_cache.update({'_id': key},
-                                {'_id': key, 'val': val}, upsert=True)
-
-    return result
+        value = call()
+        self.set(key, value)
+        return value
 
 
-def cached(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not app.debug:
-            content = cache(request.path, lambda: f(*args, **kwargs))
-        else:
-            content = f(*args, **kwargs)
+class DevelopmentCache(NullCache):
 
-        if isinstance(content, unicode):
-            bytes = content.encode('utf-8')
-        else:
-            bytes = str(content)
-        etag = sha1(bytes).hexdigest()
+    def __init__(self, app):
+        pass
 
-        response = make_response(content)
-        response.set_etag(etag)
-        response.make_conditional(request)
-        return response
+    def cached_view(self, *args, **kwargs):
+        def decorator(f):
+            return f
+        return decorator
 
-    return decorated_function
+    def cached_call(self, key, call, *args, **kwargs):
+        return call()

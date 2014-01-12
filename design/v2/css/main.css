@@ -1,0 +1,16 @@
+.container {
+    position: relative;
+}
+
+.thumbnail {
+    text-align: center;
+}
+
+.page-header {
+    position: relative;
+}
+
+.fb {
+    position: absolute;
+    right: 0; top: 0;
+}

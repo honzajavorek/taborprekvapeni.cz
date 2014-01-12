@@ -29,7 +29,7 @@ Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi 
             <a href="{{ url_for('program') }}" class="button">Více o naší filozofii a programu</a>
         </li>
         <li>
-            {% filter markdown %}Tým vedoucích je **sehraná parta lidí**, která tábor připravuje několik měsíců před jeho začátkem. [Pavel Gál]({{ url_for('team', slug_url='pavel-gal') }}) je **zkušený hlavní vedoucí**, na tábory jezdí už {{ volume_year - 1980 }} let. Součástí týmu je samozřejmě také zdravotnice.{% endfilter %}
+            {% filter markdown %}Tým vedoucích je **sehraná parta lidí**, která tábor připravuje několik měsíců před jeho začátkem. [Pavel Gál]({{ url_for('team', slug='pavel-gal') }}) je **zkušený hlavní vedoucí**, na tábory jezdí už {{ volume_year - 1980 }} let. Součástí týmu je samozřejmě také zdravotnice.{% endfilter %}
 
             {% set members = members|members_showcase %}
             {{ macros.team_menu(members) }}

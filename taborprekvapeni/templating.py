@@ -3,55 +3,24 @@
 
 import re
 import os
-import lxml
 import random
+
+import lxml
 import unidecode
+from flask import request
 from jinja2 import Markup
-from functools import wraps
-from flask.ext.gzip import Gzip
 from flask.ext.markdown import Markdown
-from flask import url_for as original_url_for, request
 
-from taborprekvapeni import app, __version__ as version
-
-
-Gzip(app)
-
-
-def url_for(endpoint, **values):
-    url = original_url_for(endpoint, **values)
-    if endpoint in ['static', 'favicon']:
-        sep = '&' if ('?' in url) else '?'
-        url += '{0}v{1}'.format(sep, version)
-    return url
+from taborprekvapeni import app
 
 
 @app.before_request
-def before_request():
-    md = Markdown(app, **app.config['MARKDOWN'])
-
+def init_markdown():
     # To prevent incremental numbering of headerids,
     # instance of Markdown is created and registered
     # before each HTTP request.
+    md = Markdown(app, **app.config['MARKDOWN'])
     app.jinja_env.filters['markdown'] = md
-
-
-def minified(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        result = f(*args, **kwargs)
-        if not app.debug:
-            soup = lxml.html.fromstring(result)
-            for text in soup.xpath('//text()'):
-                if re.match(r'\s+$', text):  # is whitespace
-                    if text.is_tail:
-                        text.getparent().tail = ' '
-                    else:
-                        text.getparent().text = ' '
-            return lxml.html.tostring(soup, encoding='utf-8')
-        else:
-            return result.encode('utf-8')
-    return decorated_function
 
 
 @app.template_filter()
@@ -75,9 +44,11 @@ def slugify(string, sep='_'):
 @app.template_filter()
 def email(address):
     username, server = address.split('@')
-    markup = ('<a href="mailto:{username}&#64;{server}">'
-              '{username}&#64;<!---->{server}</a>').format(username=username,
-                                                           server=server)
+    email_markup_fmt = (
+        '<a href="mailto:{username}&#64;{server}">'
+        '{username}&#64;<!---->{server}</a>'
+    )
+    markup = (email_markup_fmt).format(username=username, server=server)
     return Markup(markup)
 
 

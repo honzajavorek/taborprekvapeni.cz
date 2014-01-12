@@ -30,8 +30,8 @@ pip-log.txt
 # Eclipse
 .settings
 
-# Environment
-.env
+# Cache
+tmp
 
 # Backup
 backup

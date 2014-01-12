@@ -76,8 +76,8 @@
 {% endmacro %}
 
 
-{% macro member_image(slug_file) %}
-    {% set filename = 'images/' + slug_file + '.jpg' %}
+{% macro member_image(slug) %}
+    {% set filename = 'images/' + slug + '.jpg' %}
 
     {% if not ('static/' + filename)|file_exists %}
         {% set filename = 'images/placeholder.jpg' %}
@@ -86,8 +86,8 @@
 {% endmacro %}
 
 
-{% macro member_item(slug_file, slug_url, name, nickname=None, post=None) %}
-    {% set image_html = member_image(slug_file) %}
+{% macro member_item(slug, name, nickname=None, post=None) %}
+    {% set image_html = member_image(slug) %}
     {% set name_html = ('<strong>' + name + '</strong>')|safe %}
     {% set post_html = ('<em>' + post + '</em>')|safe %}
 
@@ -98,7 +98,7 @@
     {% endif %}
 
     {{ menu_item(
-        url_for('team', slug_url=slug_url),
+        url_for('team', slug=slug),
         [image_html, name_html, nick_html, post_html]|join(' '),
         post|slugify
     ) }}
@@ -109,8 +109,7 @@
     <ul class="team gallery">
     {% for text in texts %}
         {{ member_item(
-            text.slug_file,
-            text.slug_url,
+            text.slug,
             text.full_name,
             text.nickname,
             text.post
