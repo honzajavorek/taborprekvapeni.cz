@@ -39,7 +39,7 @@ def deploy():
     local('git push origin {0}:{0}'.format(branch))
 
     # push to Heroku
-    local('git push heroku deploy:master --force')
+    local('git push heroku {0}:master'.format(branch))
     if 'web.1: up' not in capture('heroku ps'):
         local('heroku ps:scale web=1')
 
