@@ -2,15 +2,11 @@
 
 {% macro menu_item(url, text, class='') %}
     {% if url == request.path or (url != '/' and request.path.startswith(url)) %}
-        {% set class = class + ' selected' %}
-        <li class="{{ class }}">
-            <strong>{{ text|safe }}</strong>
-        </li>
-    {% else %}
-        <li{% if class %} class="{{ class }}"{% endif %}>
-            <a href="{{ url }}">{{ text|safe }}</a>
-        </li>
+        {% set class = class + ' active' %}
     {% endif %}
+    <li{% if class %} class="{{ class }}"{% endif %}>
+        <a href="{{ url }}">{{ text|safe }}</a>
+    </li>
 {% endmacro %}
 
 
@@ -22,57 +18,70 @@
         {% set filename = 'images/placeholder.jpg' %}
     {% endif %}
 
-    <img src="{{ url_for('static', filename=filename) }}" width="250" height="250" class="volume">
+    <img src="{{ url_for('static', filename=filename) }}" class="img-responsive">
 {% endmacro %}
 
 
 {% macro volume_item(year, place, topic) %}
     {% set year = year|string %}
 
-    {% set image_html = volume_image(year) %}
-    {% set topic_html = ('<em>' + topic + '</em>')|safe %}
-    {% set place_html = ('<small>' + place + ' ' + year + '</small>')|safe %}
-
-    {{ menu_item(
-        url_for('history', year=year),
-        [image_html, topic_html, place_html]|join(' '),
-    ) }}
+    <a href="{{ url_for('history', year=year) }}" class="thumbnail v{{ year }}">
+        {{ volume_image(year) }}
+        <div class="caption">
+            <h3>
+                {{ topic|split('·')|join('<small class="amp">&nbsp;&amp;</small><br>')|safe }}
+                <small>{{ place }} {{ year }}</small>
+            </h3>
+        </div>
+    </a>
 {% endmacro %}
 
 
 {% macro history_menu(texts) %}
-    <ul class="history gallery">
-    {% for text in texts %}
-        {{ volume_item(
-            text.year,
-            text.place,
-            text.title
-        ) }}
-    {% endfor %}
-    </ul>
+    <div class="nav nav-history">
+        <div class="row">
+            {% for text in texts %}
+                <div class="col-md-4">
+                    {{ volume_item(
+                        text.year,
+                        text.place,
+                        text.title
+                    ) }}
+                </div>
+                {% if loop.index is divisibleby 3 %}<div class="clearfix"></div>{% endif %}
+            {% endfor %}
+        </div>
+    </div>
 {% endmacro %}
 
 
 {% macro album_image(album) %}
-    <img src="{{ url_for('image_proxy', url=album.image_url, resize='250x250') }}" width="250" height="250" class="album">
+    <img src="{{ url_for('image_proxy', url=album.image_url, resize='400x400') }}" class="img-responsive">
 {% endmacro %}
 
 
 {% macro album_gallery(albums) %}
-    <ul class="albums gallery">
-    {% for album in albums %}
-        <li>
-            <a href="{{ album.url }}" target="_blank">
-                {{ album_image(album) }}
-                {% if album.count == 1 %}
-                    1 fotka
-                {% else %}
-                    {{ album.count }} fotek
-                {% endif %}
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
+    <div class="nav nav-albums">
+        <div class="row">
+            {% for album in albums %}
+                <div class="col-md-4">
+                    <a href="{{ album.url }}" class="thumbnail" target="_blank">
+                        {{ album_image(album) }}
+                        <div class="caption">
+                            <h3>
+                                {% if album.count == 1 %}
+                                    1 fotka
+                                {% else %}
+                                    {{ album.count }} fotek
+                                {% endif %}
+                            </h3>
+                        </div>
+                    </a>
+                    {% if loop.index is divisibleby 3 %}<div class="clearfix"></div>{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endmacro %}
 
 
@@ -82,60 +91,49 @@
     {% if not ('static/' + filename)|file_exists %}
         {% set filename = 'images/placeholder.jpg' %}
     {% endif %}
-    <img src="{{ url_for('static', filename=filename) }}" width="250" height="250" class="member">
+    <img src="{{ url_for('static', filename=filename) }}" class="img-responsive">
 {% endmacro %}
 
 
 {% macro member_item(slug, name, nickname=None, post=None) %}
-    {% set image_html = member_image(slug) %}
-    {% set name_html = ('<strong>' + name + '</strong>')|safe %}
-    {% set post_html = ('<em>' + post + '</em>')|safe %}
-
-    {% if nickname %}
-        {% set nick_html = ('<small>' + nickname + '</small>')|safe %}
-    {% else %}
-        {% set nick_html = '' %}
-    {% endif %}
-
-    {{ menu_item(
-        url_for('team', slug=slug),
-        [image_html, name_html, nick_html, post_html]|join(' '),
-        post|slugify
-    ) }}
+    <a href="{{ url_for('team', slug=slug) }}" class="thumbnail {{ post|slugify }}">
+        {{ member_image(slug) }}
+        <div class="caption">
+            <h3>
+                {{ name }}
+                {% if nickname %}
+                    <small>{{ nickname }}</small>
+                {% endif %}
+                <small><strong>{{ post }}</strong></small>
+            </h3>
+        </div>
+    </a>
 {% endmacro %}
 
 
 {% macro team_menu(texts) %}
-    <ul class="team gallery">
-    {% for text in texts %}
-        {{ member_item(
-            text.slug,
-            text.full_name,
-            text.nickname,
-            text.post
-        ) }}
-    {% endfor %}
-    </ul>
-{% endmacro %}
-
-
-{% macro orders(info) %}
-    <ul class="orders gallery">
-        <li>
-            <a href="{{ info.senior.book_url }}">
-                <img src="{{ url_for('image_proxy', url=info.senior.poster_url, crop=65, resize='250x250') }}" width="250" height="250">
-                <em>{{ info.senior.topic }} ({{ info.senior.age_from }}&ndash;{{ info.senior.age_to }} let)</em>
-                <small>Varvažov {{ volume_year }}</small>
-                <strong><span class="button">Podat přihlášku: {{ info.senior.price }} Kč</span></strong>
-            </a>
-        </li>
-        <li>
-            <a href="{{ info.junior.book_url }}">
-                <img src="{{ url_for('image_proxy', url=info.junior.poster_url, crop=65, resize='250x250') }}" width="250" height="250">
-                <em>{{ info.junior.topic }} ({{ info.junior.age_from }}&ndash;{{ info.junior.age_to }} let)</em>
-                <small>Varvažov {{ volume_year }}</small>
-                <strong><span class="button">Podat přihlášku: {{ info.junior.price }} Kč</span></strong>
-            </a>
-        </li>
-    </ul>
+    <div class="nav nav-team">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                {{ member_item(
+                    texts.0.slug,
+                    texts.0.full_name,
+                    texts.0.nickname,
+                    texts.0.post
+                ) }}
+            </div>
+            <div class="clearfix"></div>
+            {% for text in texts[1:] %}
+                <div class="col-md-4">
+                    {{ member_item(
+                        text.slug,
+                        text.full_name,
+                        text.nickname,
+                        text.post
+                    ) }}
+                </div>
+                {% if loop.index is divisibleby 3 %}<div class="clearfix"></div>{% endif %}
+            {% endfor %}
+        </div>
+    </div>
 {% endmacro %}

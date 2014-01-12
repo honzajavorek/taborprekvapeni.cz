@@ -1,91 +1,144 @@
 {% import 'macros.html' as macros with context %}
 {% extends 'base.html' %}
+{% block topnav %}{% endblock %}
+{% block contact %}{% endblock %}
 {% block content %}
-
-<div class="lead" style="text-align: center; padding-bottom: 2em;">
-<h1>Ahoj!</h1>
-
-<div style="font-size: 150%;">
-{% filter markdown %}
-Každoročně jezdíme na kraj civilizace, abychom tam 14 dní s vašimi dětmi běhali po lese, stavěli ze dřeva, vymýšleli a luštili šifry, převlékali se do masek a poskakovali na diskotéce. Baví nás to už {{ volume_no }} let.
-{% endfilter %}
-</div>
-</div>
-
-<h2>
-    Tábor {{ volume_year }} {% if is_past %}byl{% else %}je{% endif %} v termínu
-    {{ info.senior.starts_at|date }} až {{ info.senior.ends_at|date }}
-    {% if not is_past %}&ndash; začíná už za {{ countdown }} dní!{% endif %}
-</h2>
-
-{{ macros.orders(info) }}
-
-<div class="motivation">
-    <h2>Proč jet s námi?</h2>
-    <ul>
-        <li>
-            {% filter markdown %}Náš tábor je **aktivně prožitá část prázdnin**. Děti nesedí u počítačů ani se nepovalují v chatičkách. Na celé dva týdny pro ně máme **nabitý celodenní program** plný soutěží a her. Chceme, aby se s námi děti bavily, něco se naučily, aby poznaly kamarádství, přátelství, soudržnost, ale také soutěž, soupeření a souboje. Vedeme děti k **samostatnosti a zodpovědnosti**.{% endfilter %}
-
-            <a href="{{ url_for('program') }}" class="button">Více o naší filozofii a programu</a>
-        </li>
-        <li>
-            {% filter markdown %}Tým vedoucích je **sehraná parta lidí**, která tábor připravuje několik měsíců před jeho začátkem. [Pavel Gál]({{ url_for('team', slug='pavel-gal') }}) je **zkušený hlavní vedoucí**, na tábory jezdí už {{ volume_year - 1980 }} let. Součástí týmu je samozřejmě také zdravotnice.{% endfilter %}
-
-            {% set members = members|members_showcase %}
-            {{ macros.team_menu(members) }}
-
-            <a href="{{ url_for('team') }}" class="button">Vše o vedoucích</a>
-        </li>
-        <li>
-            {% filter markdown %}Organizačně je tábor rozdělen do dvou jednotek - **děti do {{ info.junior.age_to }} let hrají samostatnou hru**, žijí svůj táborový život, který se jen sporadicky prolíná s hrami a soutěženi těch velkých. Program je tedy vždy adekvátní věkovému složení účastníků.{% endfilter %}
-
-            <a href="{{ url_for('program') }}" class="button">Více o programu</a>
-        </li>
-        <li>
-            {% filter markdown %}Díky **tradici** se můžeme poučit z minulosti. {{ volume_no }} let si hromadíme a předáváme **společné know-how** jak s dětmi pracovat, které hry se povedly, jaká opatření se osvědčila a na co si dát příště pozor.{% endfilter %}
-
-            <a href="{{ url_for('history') }}" class="button">Zápisky z historie</a>
-        </li>
-        <li>
-            {% filter markdown %}Základnu máme v rekreačním středisku uprostřed lesů v malebném údolí nedaleko Zvíkovského Podhradí. Děti bydlí v **chatkách nebo stanech s podsadou**, k dispozici mají v hlavní budově **normální WC a sprchy s teplou vodou**. Jídelna zajišťuje **stravu 5&times; denně**. V areálu je prostor pro míčové hry, ráchání v přírodním koupališti, táboráky.{% endfilter %}
-
-            <a href="{{ url_for('info') }}" class="button">Vše o místě konání</a>
-        </li>
-        <li>
-            {% filter markdown %}Odjezd na tábor je **z pražského Florence**, počítá se ale i se svozem dětí **z dalších měst**, jež jsou na trasách autobusů a vlaků Student Agency a AMS bus. Samozřejmě je možná i vlastní doprava autem.{% endfilter %}
-
-            <a href="{{ url_for('info') }}" class="button">Další organizační informace</a>
-        </li>
-  </ul>
-</div>
-
-
-<div class="references">
-    <div class="reference testimonials">
-        <h2>Co o nás píší</h2>
-        <dl>
-            <dt>Iva Palivcová</dt>
-            <dd>{% filter markdown %}Chtěla bych poděkovat vedení tábora Havlasovi, Levanduli, ale i všem ostatním vedoucím a praktikantům za jejich rodičovský přístup ke všem dětem. Není to jen *Tábor plný překvapení*, ale tábor plný zkušeností, ponaučení, nápadů a legrace. Děti se od Vás naučí týmové práci toleranci jeden druhého. Váš přístup k dětem a vedení celého chodu tábora je zcela ojedinělý, je za vámi vidět velký kus práce, zodpovědné přípravy a opravdového zapálení. Každý váš táborník se musí vracet domů pln nadšení, obohacen o nové dobré kamarády a zážitky.{% endfilter %}</dd>
-        </dl>
-    </div>
-    <div class="reference last_year">
-        <h2>Loňský tábor</h2>
+<div class="row lead">
+    <div class="col-md-4">
+        <h2>Co</h2>
         <p>
-            <a href="{{ url_for('history', year=(volume_year - 1)) }}">
-                {{ macros.volume_image(volume_year - 1) }}
-                Jak jsme si hráli v roce {{ volume_year - 1 }}
-            </a>
-        </p>
+            Pošlete své děti na tábor, kde se budou 2 týdny bavit i vzdělávat pod vedením zkušených vedoucích.
+        <p>
     </div>
-    <div class="reference fb">
-        <h2>Facebook</h2>
-        <div class="fb-like-box"
-            data-href="http://www.facebook.com/taborprekvapeni"
-            data-width="292"
-            data-show-faces="true"
-            data-stream="false"
-            data-border-color="#FFF"
-            data-header="false">
+    <div class="col-md-4">
+        <h2>Kde</h2>
+        <p>
+            Tábor se nachází v lese uprostřed přírody v Jižních Čechách.
+        <p>
+    </div>
+    <div class="col-md-4">
+        <h2>Kdy</h2>
+        <p>
+            V létě {{ volume_year }} v termínu {{ info.senior.starts_at|date_range(info.senior.ends_at) }}.
+        <p>
+    </div>
+</div>
+
+{% if not is_past %}
+<div class="row orders">
+    <div class="col-md-6">
+        <a class="thumbnail order order-junior" href="{{ info.junior.book_url }}">
+            <img src="{{ url_for('image_proxy', url=info.junior.poster_url, resize='700x400') }}" class="img-responsive">
+            <div class="label label-primary">{{ info.junior.age_from }}&ndash;{{ info.junior.age_to }}&nbsp;let</div>
+            <div class="caption">
+                <div class="row">
+                    <h2 class="col-md-7">{{ info.junior.topic }}</h2>
+                    <div class="col-md-5">
+                        <button class="btn btn-lg btn-primary btn-block">
+                            <i class="fa fa-arrow-right"></i> Podat přihlášku<br>
+                            <small>{{ info.junior.price }} Kč</small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a class="thumbnail order order-senior" href="{{ info.senior.book_url }}">
+            <img src="{{ url_for('image_proxy', url=info.senior.poster_url, resize='700x400') }}" class="img-responsive">
+            <div class="label label-primary">{{ info.senior.age_from }}&ndash;{{ info.senior.age_to }}&nbsp;let</div>
+            <div class="caption">
+                <div class="row">
+                    <h2 class="col-md-7">{{ info.senior.topic }}</h2>
+                    <div class="col-md-5">
+                        <button class="btn btn-lg btn-primary btn-block">
+                            <i class="fa fa-arrow-right"></i> Podat přihlášku<br>
+                            <small>{{ info.senior.price }} Kč</small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endif %}
+
+<div class="boxes">
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{{ url_for('program') }}" class="box">
+                <h3><i class="fa fa-flag"></i> <span>Aktivně prožitá část prázdnin</span></h2>
+                <p>
+                    Na každý den máme pro děti nachystaný celodenní program plný soutěží a her. Děti nesedí u počítačů, ani se nepovalují v chatkách. Baví se a také se něco naučí. Poznají nové kamarády, ale budou také soutěžit. Děti vedeme k samostatnosti a zodpovědnosti.
+                </p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('program') }}" class="box">
+                <h3><i class="fa fa-sort-numeric-desc"></i> <span>Program přizpůsobený věku dítěte</span></h2>
+                <p>
+                    Děti jsou v táboře rozděleny do 2 skupin podle věku. Mladší děti do {{ info.junior.age_to }} let hrají samostatnou hru, žijí svůj táborový život a jen výjimečně se zapojují do zábavy či úkolů se staršími dětmi. Program tábora je vždy přizpůsoben schopnostem dětí podle jejich věku a vyspělosti.
+                </p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('team') }}" class="box">
+                <h3><i class="fa fa-star"></i> <span>Dlouholeté zkušenosti v práci s dětmi</span></h2>
+                <p>
+                    Tým vedoucích je sehraná parta lidí, která tábor organizuje již {{ volume_no }} let. Hlavní vedoucí Pavel Gál jezdí na tábory {{ now.year - 1980 }} let. Součástí týmu je také zdravotnice. Díky dlouholeté tradici víme, jak s dětmi pracovat, které hry se jim líbí anebo kdy dbát zvýšené opatrnosti.
+                </p>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{{ url_for('info') }}" class="box">
+                <h3><i class="fa fa-home"></i> <span>Uprostřed přírody s veškerým komfortem</span></h2>
+                <p>
+                    Základna tábora se nachází v rekreačním středisku uprostřed lesů v malebném údolí nedaleko Zvíkovského Podhradí. Děti bydlí v chatkách nebo stanech s podsadou. V hlavní budově mají k dispozici toalety a sprchy s teplou vodou. Jídlo připravujeme pro děti 5krát denně. V areálu je hřiště pro míčové hry i přírodní koupaliště.
+                <p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('info') }}" class="box">
+                <h3><i class="fa fa-truck"></i> <span>Jak se děti na tábor dostanou</span></h2>
+                <p>
+                    Odjezd na tábor je z pražského Florence. Počítá se ale i se svozem dětí z dalších měst, které jsou na trasách autobusů a vlaků Student Agency a AMS bus. Můžete samozřejmě své děti přivézt na místo sami autem. Cesta z Prahy zabere asi 80 minut, z Brna pojedete 2,5 hodiny.
+                </p>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <div class="box">
+                <h3><i class="fa fa-trophy"></i> <span>Rodiče náš tábor chválí</span></h2>
+                <blockquote>
+                    <p>Děkuji vedení tábora Havlasovi, Levanduli i ostatním vedoucím a praktikantům za jejich rodičovský přístup k našim dětem. Tábor není plný jen překvapení, ale i zkušeností a legrace, o kterých nám děti po příjezdu domů dlouho nadšeně vyprávěly.</p>
+                    <small>Iva Palivcová</small>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row aside">
+    <div class="col-md-8">
+        <a class="thumbnail photo" href="{{ url_for('history') }}">
+            <img src="{{ url_for('static', filename='images/photo.jpg') }}">
+            <div class="caption">
+                <h3>Historie a fotky</h3>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4 hidden-xs hidden-sm">
+        <div class="fb-box">
+            <h3 class="sr-only">Facebook</h2>
+            <div class="fb-like-box"
+                data-href="http://www.facebook.com/taborprekvapeni"
+                data-width="292"
+                data-show-faces="true"
+                data-stream="false"
+                data-border-color="#FFF"
+                data-header="false">
+            </div>
         </div>
     </div>
 </div>

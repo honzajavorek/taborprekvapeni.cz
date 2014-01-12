@@ -10,31 +10,26 @@
 
 
 {% block content %}
-
-<p class="back"><a href="{{ url_for('team') }}" class="button">Všichni vedoucí</a></p>
-
 <h1>
     {{ text.full_name|safe }}
     {% if text.nickname %}
         <small>{{ text.nickname|safe }}</small>
     {% endif %}
+    <small><strong>{{ text.post }}</strong></small>
 </h1>
-<p>{{ text.post }}</p>
 
 {% if text %}
-    <div class="text">
-        {{ macros.member_image(text.slug) }}
+    <div class="text clearfix">
+        <div class="img-thumbnail">
+            {{ macros.member_image(text.slug) }}
+        </div>
         {{ text|markdown }}
     </div>
 {% endif %}
 
-{% endblock %}
-
-
-{% block subnav %}
-
-<h2>Všichni vedoucí</h2>
-{{ macros.team_menu(all_texts) }}
-<hr>
-
+<div class="back">
+    <p>
+        <a href="{{ url_for('team') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Všichni vedoucí</a>
+    </p>
+</div>
 {% endblock %}

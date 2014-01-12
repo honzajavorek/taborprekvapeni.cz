@@ -5,10 +5,13 @@
 {% block description %}Organizační informace pro rodiče. Místo konání tábora, adresa kam posílat dopisy dětem, doprava na tábor, a další.{% endblock %}
 
 
-{% block content %}{% filter markdown %}
+{% block content %}
+<h1>Organizační informace</h1>
+<p class="lead">
+    Základna tábora se nachází v rekreačním středisku uprostřed lesů v malebném údolí nedaleko Zvíkovského Podhradí. Děti bydlí v chatkách nebo stanech s podsadou. V hlavní budově mají k dispozici toalety a sprchy s teplou vodou. Jídlo připravujeme pro děti 5krát denně. V areálu je hřiště pro míčové hry i přírodní koupaliště.
+</p>
 
-# Organizační informace
-
+{% filter markdown %}
 Kompletní **organizační informace** jsou k dispozici [na webu provozovatele](http://www.tabory.cz/lokalita/letni-tabory-cr/varvazov/). **Pokyny k odjezdu** včetně PDF ke stažení lze najít zvlášť na následujících odkazech:
 
 - [{{ info.senior.topic }}]({{ info.senior.departure_url }}) ({{ info.senior.age_from }}&ndash;{{ info.senior.age_to }} let)
@@ -18,18 +21,18 @@ Kompletní **organizační informace** jsou k dispozici [na webu provozovatele](
 
 Tábor se koná v Jižních Čechách, 7 km od Zvíkovského Podhradí. Detailní údaje o **RS Spolana Varvažov** jsou k dispozici [na webu provozovatele](http://www.tabory.cz/varvazov.html).
 
-<ul class="facility gallery">
-    <li>
-        <a href="http://www.varvazov.wz.cz/foto.htm" target="_blank">
-            <img src="{{ url_for('image_proxy', url='http://www.varvazov.wz.cz/img00008.jpg', resize='250x250') }}" width="250" height="250">
+<div class="row">
+    <div class="col-md-6">
+        <a href="http://www.varvazov.wz.cz/foto.htm" target="_blank" class="thumbnail">
+            <img src="{{ url_for('image_proxy', url='http://www.varvazov.wz.cz/img00008.jpg', resize='600x400') }}">
         </a>
-    </li>
-    <li>
-        <a href="http://www.varvazov.wz.cz/foto.htm" target="_blank">
-            <img src="{{ url_for('image_proxy', url='http://www.varvazov.wz.cz/img00006.jpg', resize='250x250') }}" width="250" height="250">
+    </div>
+    <div class="col-md-6">
+        <a href="http://www.varvazov.wz.cz/foto.htm" target="_blank" class="thumbnail">
+            <img src="{{ url_for('image_proxy', url='http://www.varvazov.wz.cz/img00006.jpg', resize='600x400') }}">
         </a>
-    </li>
-</ul>
+    </div>
+</div>
 
 ### Adresa tábora
 
@@ -42,9 +45,4 @@ RS Spolana Varvažov<br>
 GPS: <code>49°25'58.253"N, 14°8'1.301"E</code><br>
 <a href="http://mapy.cz/s/6bOY" target="_blank">mapa</a>, <a href="http://www.varvazov.wz.cz/cesta.htm" target="_blank">popis cesty</a>
 {% endfilter %}
-
-
-<p class="call_to_action">
-    Nejsou zde odpovědi na vaše otázky? <a href="{{ url_for('contact') }}" class="button">Kontaktujte nás!</a>
-</p>
 {% endblock %}

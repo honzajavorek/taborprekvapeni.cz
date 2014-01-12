@@ -1,39 +1,25 @@
 {%- import 'macros.html' as macros with context -%}
 {% extends 'base.html' %}
-
-
 {% block description %}Kontakty na hlavního vedoucího a provozovatele tábora.{% endblock %}
-
-
+{% block contact %}{% endblock %}
 {% block content %}
 <h1>Kontakty</h1>
-<ul>
-    <li>
+<div class="row">
+    <div class="col-md-6">
         <h2>Hlavní vedoucí</h2>
         <p>
             {% filter markdown %}[Pavel Gál]({{ url_for('team', slug='pavel-gal') }})<br>
             <small>+420</small> 607 706 867<br>
             {{ 'p.gal@seznam.cz'|email }}{% endfilter %}
         </p>
-    </li>
-    <li>
+    </div>
+    <div class="col-md-6">
         <h2>Provozovatel</h2>
         <p>
             {% filter markdown %}Cestovní kancelář Topinka, s.r.o.<br>
             IČ: [27152251](http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_rzp.cgi?ico=27152251&jazyk=cz&xml=1&rozsah=0)<br>
             <a href="http://www.tabory.cz/kontakty.html">Objednávky, reklamace, oficiální sídlo</a>{% endfilter %}
         </p>
-    </li>
-    <li>
-        <h2>Facebook</h2>
-        <div class="fb-like-box"
-            data-href="http://www.facebook.com/taborprekvapeni"
-            data-width="292"
-            data-show-faces="true"
-            data-stream="false"
-            data-border-color="#FFF"
-            data-header="false">
-        </div>
-    </li>
-</ul>
+    </div>
+</div>
 {% endblock %}

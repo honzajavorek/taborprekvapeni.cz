@@ -42,14 +42,19 @@ class ImageEditor(object):
 
     def resize(self, width, height):
         image = self.image
-        is_rect = width == height
         old_w, old_h = image.size
 
-        # resize by shorter side
-        if width < height or (is_rect and old_w < old_h):
-            size = (width, old_h * width / old_w)
-        else:
+        # resize
+        keep_height = (
+            (old_w < old_h and width > height)
+            or
+            (old_w > old_h and width <= height)
+        )
+        if keep_height:
             size = (old_w * height / old_h, height)
+        else:
+            size = (width, old_h * width / old_w)
+
         image = image.resize(size, Image.ANTIALIAS)
 
         # crop the rest, centered

@@ -23,6 +23,10 @@ def init_markdown():
     app.jinja_env.filters['markdown'] = md
 
 
+months = (u'ledna', u'února', u'března', u'dubna', u'května', u'června',
+          u'července', u'srpna', u'září', u'října', u'listopadu', u'prosince')
+
+
 @app.template_filter()
 def file_exists(filename):
     path = os.path.join(app.root_path, filename)
@@ -31,8 +35,16 @@ def file_exists(filename):
 
 @app.template_filter()
 def date(dt):
-    d = dt.strftime('%d. %m.')
-    return re.sub(r'0+(\d+)', r'\1', d)
+    return u'{}.\xa0{}'.format(dt.day, months[dt.month - 1])
+
+
+@app.template_filter()
+def date_range(dt_from, dt_to):
+    s = u'od\xa0{}.'.format(dt_from.day)
+    if dt_from.month != dt_to.month:
+        s += u'\xa0{}'.format(months[dt_from.month - 1])
+    s += u'\xa0do\xa0{}.\xa0{}'.format(dt_to.day, months[dt_to.month - 1])
+    return s
 
 
 @app.template_filter()

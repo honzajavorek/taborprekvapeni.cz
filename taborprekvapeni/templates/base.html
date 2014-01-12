@@ -20,7 +20,7 @@
         <meta property="og:image" content="{{ self.content()|extract_image }}">
 
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Domine&amp;subset=latin,latin-ext">
-        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
         <link rel="shortcut icon" href="{{ url_for('favicon') }}" type="image/x-icon">
         <link rel="icon" href="{{ url_for('favicon') }}" type="image/x-icon">
@@ -40,37 +40,57 @@
         {% endif %}
     </head>
     <body>
-        <div class="document" id="{{ request.endpoint }}">
-            <div id="fb-root"></div>
-            <script>(function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));</script>
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = '//connect.facebook.net/en_US/all.js#xfbml=1';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
 
-            <p class="header">
-                <a href="{{ url_for('index') }}"><strong>{{ self.site_name() }}</strong></a>
-                 ·
+        <div class="container">
+            <div class="page-header">
+                <h1><a href="{{ url_for('index') }}">{{ self.site_name() }}</a>
                 {% block subtitle -%}
-                    Letní tábor v Jižních Čechách pro děti od {{ info.junior.age_from }} do {{ info.senior.age_to }} let.
+                    <small>Letní tábor pro děti od {{ info.junior.age_from }} do {{ info.senior.age_to }} let</small>
                 {%- endblock %}
-            </p>
-            <hr>
+                </h1>
 
+                <div class="fb hidden-xs hidden-sm">
+                    <div class="fb-like" data-href="https://www.facebook.com/taborprekvapeni" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+                </div>
+            </div>
+            <nav class="nav nav-top clearfix">
+                {% block topnav %}
+                    <h2 class="sr-only">Menu</h2>
+                    <ul class="nav nav-pills pull-right">
+                        {{ macros.menu_item(url_for('index'), 'Ahoj!') }}
+                        {{ macros.menu_item(url_for('program'), 'Filozofie a náplň') }}
+                        {{ macros.menu_item(url_for('team'), 'Tým vedoucích') }}
+                        {{ macros.menu_item(url_for('history'), 'Historie a fotky') }}
+                        {{ macros.menu_item(url_for('info'), 'Organizační informace') }}
+                        {{ macros.menu_item(url_for('contact'), 'Kontakty') }}
+                    </ul>
+                {% endblock %}
+            </nav>
             <div class="content">
-            {% block content %}{% endblock %}
-            <hr>
+                {% block content %}{% endblock %}
             </div>
-
-            <div class="subnav">
-                {% block subnav %}{% endblock %}
+            <div class="contact">
+                {% block contact %}
+                    <hr>
+                    <h3>Chcete vědět více? Potřebujete poradit?</h3>
+                    <p>
+                        <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg" rel="button">
+                            <i class="fa fa-phone"></i> Kontaktujte nás
+                        </a>
+                    </p>
+                {% endblock %}
             </div>
-
-            <div class="nav">
-                <h2>Menu</h2>
-                <ul>
+            <nav class="nav nav-main">
+                <h2 class="sr-only">Menu</h2>
+                <ul class="list-inline">
                     {{ macros.menu_item(url_for('index'), 'Ahoj!') }}
                     {{ macros.menu_item(url_for('program'), 'Filozofie a náplň') }}
                     {{ macros.menu_item(url_for('team'), 'Tým vedoucích') }}
@@ -79,21 +99,13 @@
                     {{ macros.menu_item(url_for('contact'), 'Kontakty') }}
                 </ul>
                 <hr>
-            </div>
-
-            <p class="footer">
-                <small><strong>Tábor plný překvapení</strong> je značka, pod kterou od roku 2004 vystupuje parta vedoucích v čele s Pavlem Gálem.
-                Provozovatelem tábora je <a href="http://www.tabory.cz">CK Topinka</a>.</small>
-            </p>
-
-            <div class="fb_like">
-                <div class="fb-like"
-                    data-layout="button_count"
-                    data-href="http://www.facebook.com/taborprekvapeni"
-                    data-send="false"
-                    data-width="150">
-                </div>
-            </div>
+            </nav>
+            <footer>
+                <p>
+                    <small><strong>Tábor plný překvapení</strong> je značka, pod kterou od roku 2004 vystupuje parta vedoucích v čele s <a href="{{ url_for('team', slug='pavel-gal') }}">Pavlem Gálem</a>.
+                    Provozovatelem tábora je <a href="http://www.tabory.cz" target="_blank">CK Topinka</a>.</small>
+                </p>
+            </footer>
         </div>
     </body>
 </html>

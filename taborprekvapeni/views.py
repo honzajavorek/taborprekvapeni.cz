@@ -32,6 +32,7 @@ def inject_info():
 
     return {
         'info': info,
+        'now': now,
         'volume_year': starts_at.year,
         'volume_no': starts_at.year - 1997,
         'is_past': now.date() > ends_at,
