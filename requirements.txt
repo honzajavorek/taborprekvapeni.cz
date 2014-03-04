@@ -8,3 +8,5 @@ pymongo==2.6.3
 times==0.6.2
 pillow==2.3.0
 unidecode==0.04.14
+raven==3.4.1
+blinker==1.3
