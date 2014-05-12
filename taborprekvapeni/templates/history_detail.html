@@ -2,44 +2,33 @@
 {% extends 'base.html' %}
 
 
-{% block title %}{{ text.title|split(' · ')|join(', ') }} · {{ text.place }} {{ year }}{% endblock %}
 {% block description -%}
     Zápisek s fotogalerií k {{ (year + 1) - 1997 }}. ročníku Tábora plného překvapení. Název celotáborové hry byl
     &#34;{{ text.title|split(' · ')|join('" a malí měli "') }}&#34;.
 {%- endblock %}
 
+{% block site_title %}
+    Historie a fotky: {{ text.title|split(' · ')|join(', ') }} · {{ text.place }} {{ year }}
+{% endblock %}
+
+{% block title %}
+    Ročník {{ year }}
+{% endblock %}
+
+{% block lead %}
+    {{ text.title|split('·')|join('&amp;')|safe }}, {{ text.place }} {{ year }}
+{% endblock %}
+
+{% block image %}{% if text %}{{ macros.volume_image(year, class='r') }}{% endif %}{% endblock %}
 
 {% block content %}
-<h1>
-    {{ text.title|split('·')|join('<small>&amp;</small>')|safe }}
-    <small>{{ text.place }} <strong>{{ year }}</strong></small>
-</h1>
-
 {% if text %}
-    <div class="text clearfix">
-        <div class="img-thumbnail">
-            {{ macros.volume_image(year) }}
-        </div>
-        {{ text|markdown }}
-    </div>
+    {{ text|markdown }}
 {% endif %}
-
-<div class="back">
-    <p>
-        <a href="{{ url_for('history') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Všechny ročníky</a>
-    </p>
-</div>
 
 {% if albums %}
-    <div class="albums">
-        <h2>Alba s fotkami</h2>
-        {{ macros.album_gallery(albums) }}
-    </div>
+    <h2>Alba s fotkami</h2>
+    {{ macros.album_gallery(albums) }}
 {% endif %}
-
-<div class="back">
-    <p>
-        <a href="{{ url_for('history') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Všechny ročníky</a>
-    </p>
-</div>
+<p><a href="{{ url_for('history') }}" class="btn btn-small btn-left"><span>Všechny ročníky</span></a></p>
 {% endblock %}

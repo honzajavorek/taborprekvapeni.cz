@@ -2,34 +2,29 @@
 {% extends 'base.html' %}
 
 
-{% block title %}{{ text.full_name|safe }}{% if text.nickname %} ({{ text.nickname|safe }}){% endif %} · {{ text.post }}{% endblock %}
 {% block description -%}
     {{ text.post|safe|capitalize_first }} {{ text.full_name|safe }} {% if text.nickname %}({{ text.nickname|safe }}){% endif %}.
     Fotografie a osobní profil.
 {%- endblock %}
 
+{% block site_title %}
+    {{ text.full_name|safe }}{% if text.nickname %} ({{ text.nickname|safe }}){% endif %} · {{ text.post }}
+{% endblock %}
+
+{% block title %}
+    {{ text.full_name|safe }}, {{ text.post }}
+{% endblock %}
+
+{% block lead %}
+    {% if text.nickname %}{{ text.nickname|safe }}{% endif %}
+{% endblock %}
+
+{% block image %}{% if text %}{{ macros.member_image(text.slug, class='r') }}{% endif %}{% endblock %}
 
 {% block content %}
-<h1>
-    {{ text.full_name|safe }}
-    {% if text.nickname %}
-        <small>{{ text.nickname|safe }}</small>
-    {% endif %}
-    <small><strong>{{ text.post }}</strong></small>
-</h1>
-
 {% if text %}
-    <div class="text clearfix">
-        <div class="img-thumbnail">
-            {{ macros.member_image(text.slug) }}
-        </div>
-        {{ text|markdown }}
-    </div>
+    {{ text|markdown }}
 {% endif %}
 
-<div class="back">
-    <p>
-        <a href="{{ url_for('team') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Všichni vedoucí</a>
-    </p>
-</div>
+<p><a href="{{ url_for('team') }}" class="btn btn-small btn-left"><span>Všichni vedoucí</span></a></p>
 {% endblock %}
