@@ -1,29 +1,31 @@
 {%- import 'macros.html' as macros with context -%}
 <!DOCTYPE html>
-<html lang="cs">
+<!--[if IE 7 ]>    <html lang="cs" class="ie7 no-js"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="cs" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="cs" class="ie9 no-js"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="cs" class="no-js"> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
-        <meta property="og:type" content="website">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+        <!-- <meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;"> -->
         <meta name="description" content="{% block description %}{{ self.subtitle() }}{% endblock %}">
-        <meta property="og:description" content="{{ self.description() }}">
-
-        <meta property="og:site_name" content="{% block site_name %}Tábor plný překvapení{% endblock %} · {% block claim %}letní dětský tábor{% endblock %}">
         {% if request.path == url_for('index') %}
             <title>{{ self.site_name() }} · {{ self.claim() }}</title>
         {% else %}
-            <title>{{ self.title() }} · {{ self.site_name() }}</title>
+            <title>{{ self.site_title() }} · {{ self.site_name() }}</title>
         {% endif %}
 
-        <meta property="og:title" content="{% block title %}{{ self.content()|extract_title }}{% endblock %}">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="{% block site_name %}Tábor plný překvapení{% endblock %} · {% block claim %}letní dětský tábor{% endblock %}">
+        <meta property="og:description" content="{{ self.description() }}">
+        <meta property="og:title" content="{% block site_title %}{{ self.title() }}{% endblock %}">
         <meta property="og:image" content="{{ self.content()|extract_image }}">
 
-        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Domine&amp;subset=latin,latin-ext">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-
-        <link rel="shortcut icon" href="{{ url_for('favicon') }}" type="image/x-icon">
-        <link rel="icon" href="{{ url_for('favicon') }}" type="image/x-icon">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" media="screen, projection">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}" media="print">
+        <link rel="shortcut icon" href="{{ url_for('favicon') }}?v=1">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,800,300&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
 
         {% if not debug %}
         <script>
@@ -39,7 +41,105 @@
         </script>
         {% endif %}
     </head>
-    <body>
+    <body class="page-{% block page_type %}subpage{% endblock %}">
+        <p id="menu-accessibility">
+            <a title="Přejít k obsahu (Klávesová zkratka: Alt + 2)" accesskey="2" href="#main">Přejít k obsahu</a>
+            <span class="hide">|</span>
+            <a href="#menu-main">Přejít k hlavnímu menu</a>
+        </p>
+
+        <div id="header">
+            <div class="row-main">
+                <div class="inner">
+                    <p class="name">
+                        <a href="{{ url_for('index') }}">
+                            {{ self.site_name() }}
+                        </a>
+                        <img id="logo" src="{{ url_for('static', filename='images/logo-tabor.png') }}" alt="{{ self.site_name() }}" width="224" height="216">
+                    </p>
+                    <p class="claim">
+                        {% block subtitle -%}
+                            <strong>Letní tábor pro děti</strong> od {{ info.junior.age_from }} do {{ info.senior.age_to }} let
+                        {%- endblock %}
+                    </p>
+                </div>
+            </div> <!-- ./row-main -->
+        </div> <!-- ./header -->
+
+        <div id="intro">
+            <div id="menu-main">
+                <div class="row-main">
+                    <ul class="reset">
+                        {{ macros.menu_item(url_for('index'), 'Ahoj!') }}
+                        {{ macros.menu_item(url_for('program'), 'Filozofie a náplň') }}
+                        {{ macros.menu_item(url_for('team'), 'Tým vedoucích') }}
+                        {{ macros.menu_item(url_for('history'), 'Historie a fotky') }}
+                        {{ macros.menu_item(url_for('info'), 'Organizační informace') }}
+                        {{ macros.menu_item(url_for('contact'), 'Kontakty') }}
+                    </ul>
+                </div> <!-- ./row-main -->
+            </div> <!-- ./menu-main -->
+        </div> <!-- ./intro -->
+        <div id="main">
+            <div class="row-main">
+                {% block main %}
+                <div class="box-annot">
+                    <h1>{% block title %}{% endblock %}</h1>
+                    <p>{% block lead %}{% endblock %}</p>
+                </div> <!-- ./box-annot -->
+
+                <div class="box-wysiwyg">
+                    {% if self.image() %}<p class="img">{% block image %}{% endblock %}</p>{% endif %}
+                    {% block content %}{% endblock %}
+                </div> <!-- ./box-wysiwyg -->
+                {% endblock %}
+
+                {% block main_footer %}
+                <div class="box-help">
+                    {% block contact %}
+                    <h2 class="title">Chcete vědět více? Potřebujete poradit?</h2>
+                    <p>
+                        <a href="{{ url_for('contact') }}" class="btn btn-tel btn-long">
+                            <span><strong>Kontaktujte nás</strong></span>
+                        </a>
+                    </p>
+                    {% endblock %}
+                </div>
+                {% endblock %}
+            </div>
+        </div>
+
+        <div id="footer">
+            <div class="row-main">
+                <div class="row">
+                    <p class="l">
+                        <a href="{{ url_for('history') }}" class="box-gallery">
+                            <span class="img">
+                                <img src="{{ url_for('static', filename='images/illust/gallery.png') }}" alt="Historie a fotky" width="600" height="237">
+                            </span>
+                            <span class="overlay">Historie a fotky - navštivte fotogalerii</span>
+                        </a>
+                    </p>
+                    <div class="r fb-box">
+                        <div class="fb-like-box" data-href="https://www.facebook.com/taborprekvapeni?fref=ts" data-colorscheme="light" data-show-faces="true" data-width="260" data-height="234px" data-header="false" data-stream="false" data-show-border="false"></div>
+                    </div>
+                </div>
+                <p class="text">
+                    <strong>Tábor plný překvapení</strong> je značka, pod kterou od roku 2004 vystupuje parta vedoucích v čele s <a href="{{ url_for('team', slug='pavel-gal') }}">Pavlem Gálem</a>. Provozovatelem tábora je <a href="http://www.tabory.cz" target="_blank">CK Topinka</a>.<br>
+                    Na webu se podíleli
+                        <a href="http://honzajavorek.cz" target="_blank">Honza Javorek (programování)</a>,
+                        <a href="http://web2-0.cz/" target="_blank">Jan Horna (wireframy)</a>,
+                        <a href="http://kincel.sk/" target="_blank">Peter Kincel (design)</a> a
+                        <a href="http://www.superkoderi.cz/" target="_blank">SuperKodéři</a>.
+                </p>
+            </div> <!-- ./row-main -->
+        </div> <!-- ./footer -->
+
+        <div class="fb-button-like">
+            <div class="fb-like" data-href="https://www.facebook.com/taborprekvapeni?fref=ts" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+        </div>
+
+        <!-- FB-->
         <div id="fb-root"></div>
         <script>(function(d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
@@ -48,64 +148,5 @@
             js.src = '//connect.facebook.net/en_US/all.js#xfbml=1';
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));</script>
-
-        <div class="container">
-            <div class="page-header">
-                <h1><a href="{{ url_for('index') }}">{{ self.site_name() }}</a>
-                {% block subtitle -%}
-                    <small>Letní tábor pro děti od {{ info.junior.age_from }} do {{ info.senior.age_to }} let</small>
-                {%- endblock %}
-                </h1>
-
-                <div class="fb hidden-xs hidden-sm">
-                    <div class="fb-like" data-href="https://www.facebook.com/taborprekvapeni" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
-                </div>
-            </div>
-            <nav class="nav nav-top clearfix">
-                {% block topnav %}
-                    <h2 class="sr-only">Menu</h2>
-                    <ul class="nav nav-pills pull-right">
-                        {{ macros.menu_item(url_for('index'), 'Ahoj!') }}
-                        {{ macros.menu_item(url_for('program'), 'Filozofie a náplň') }}
-                        {{ macros.menu_item(url_for('team'), 'Tým vedoucích') }}
-                        {{ macros.menu_item(url_for('history'), 'Historie a fotky') }}
-                        {{ macros.menu_item(url_for('info'), 'Organizační informace') }}
-                        {{ macros.menu_item(url_for('contact'), 'Kontakty') }}
-                    </ul>
-                {% endblock %}
-            </nav>
-            <div class="content">
-                {% block content %}{% endblock %}
-            </div>
-            <div class="contact">
-                {% block contact %}
-                    <hr>
-                    <h3>Chcete vědět více? Potřebujete poradit?</h3>
-                    <p>
-                        <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg" rel="button">
-                            <i class="fa fa-phone"></i> Kontaktujte nás
-                        </a>
-                    </p>
-                {% endblock %}
-            </div>
-            <nav class="nav nav-main">
-                <h2 class="sr-only">Menu</h2>
-                <ul class="list-inline">
-                    {{ macros.menu_item(url_for('index'), 'Ahoj!') }}
-                    {{ macros.menu_item(url_for('program'), 'Filozofie a náplň') }}
-                    {{ macros.menu_item(url_for('team'), 'Tým vedoucích') }}
-                    {{ macros.menu_item(url_for('history'), 'Historie a fotky') }}
-                    {{ macros.menu_item(url_for('info'), 'Organizační informace') }}
-                    {{ macros.menu_item(url_for('contact'), 'Kontakty') }}
-                </ul>
-                <hr>
-            </nav>
-            <footer>
-                <p>
-                    <small><strong>Tábor plný překvapení</strong> je značka, pod kterou od roku 2004 vystupuje parta vedoucích v čele s <a href="{{ url_for('team', slug='pavel-gal') }}">Pavlem Gálem</a>.
-                    Provozovatelem tábora je <a href="http://www.tabory.cz" target="_blank">CK Topinka</a>.</small>
-                </p>
-            </footer>
-        </div>
     </body>
 </html>

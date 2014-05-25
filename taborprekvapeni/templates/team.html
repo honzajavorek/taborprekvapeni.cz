@@ -4,13 +4,13 @@
 
 {% block description %}Vše o partě vedoucích, která na tábor s dětmi jezdí a stará se o ně.{% endblock %}
 
+{% block title %}Tým vedoucích{% endblock %}
+
+{% block lead %}
+    Tým vedoucích je sehraná parta lidí, která tábor organizuje již {{ volume_no }} let. Hlavní vedoucí Pavel Gál jezdí na tábory {{ now.year - 1980 }} let. Součástí týmu je také zdravotnice. Díky dlouholeté tradici víme, jak s dětmi pracovat, které hry se jim líbí anebo kdy dbát zvýšené opatrnosti.
+{% endblock %}
 
 {% block content %}
-<h1>Tým vedoucích</h1>
-<p class="lead">
-    Tým vedoucích je sehraná parta lidí, která tábor organizuje již {{ volume_no }} let. Hlavní vedoucí Pavel Gál jezdí na tábory {{ now.year - 1980 }} let. Součástí týmu je také zdravotnice. Díky dlouholeté tradici víme, jak s dětmi pracovat, které hry se jim líbí anebo kdy dbát zvýšené opatrnosti.
-</p>
-
 {% filter markdown %}
 Tábor pro nás nejsou jen dva týdny během léta. Ač jsme z různých koutů republiky, scházíme se po celý rok a své členy si pečlivě vybíráme.
 
