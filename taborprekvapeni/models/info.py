@@ -48,7 +48,7 @@ class BasicInfo(dict):
             age_from, age_to = self._parse_age(tr[1])
 
             book_url = self._parse_url(tr[6])
-            camp_id = self._parse_id(book_url)
+            camp_id = self._parse_id(book_url) if book_url else None
 
             topic = self._parse_topic(tr[4])
             details_url = self._parse_details_url(dom, topic)
@@ -101,9 +101,13 @@ class BasicInfo(dict):
         return starts_at, ends_at
 
     def _parse_url(self, cell):
-        a = cell.xpath('.//a')[0]  # find fist A element
-        url = a.get('href')  # get its href attribute
-        return self._remove_redirect(url)
+        try:
+            a = cell.xpath('.//a')[0]  # find fist A element
+        except IndexError:
+            return None
+        else:
+            url = a.get('href')  # get its href attribute
+            return self._remove_redirect(url)
 
     def _parse_poster_url(self, poster_page_url):
         resp = requests.get(poster_page_url)
