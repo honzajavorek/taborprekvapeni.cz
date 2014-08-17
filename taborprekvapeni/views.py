@@ -27,15 +27,19 @@ def inject_info():
     info = cache.cached_call('basic-info', BasicInfo)
 
     now = times.to_local(times.now(), 'Europe/Prague')
-    starts_at = info['senior']['starts_at']
+    next_ = now.year if now.month <= 6 else now.year + 1
+
+    try:
+        starts_at = info['senior']['starts_at']
+    except KeyError:
+        starts_at = None
 
     return {
         'info': info,
         'now': now,
-        'volume_year': starts_at.year,
-        'volume_no': starts_at.year - 1997,
-        'is_past': now.date() >= starts_at,
-        'countdown': (starts_at - now.date()).days,
+        'volume_year': starts_at.year if starts_at else next_,
+        'volume_no': (starts_at.year if starts_at else next_) - 1997,
+        'is_past': now.date() >= starts_at if starts_at else True,
     }
 
 

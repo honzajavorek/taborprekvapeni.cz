@@ -20,7 +20,7 @@
             <li class="item-green">
                 <div class="inner">
                     <h2 class="title">Kdy se koná?</h2>
-                    V létě {{ volume_year }} v termínu {{ info.senior.starts_at|date_range(info.senior.ends_at) }}.
+                    V létě {{ volume_year }}{% if info.senior.starts_at %} v termínu {{ info.senior.starts_at|date_range(info.senior.ends_at) }}{% endif %}.
                 </div>
             </li>
         </ul>

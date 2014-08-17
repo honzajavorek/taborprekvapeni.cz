@@ -71,9 +71,11 @@ class BasicInfo(dict):
                 'price': self._parse_price(tr[5]),
             })
 
-        if rows[0]['age_from'] < rows[1]['age_from']:
-            return {'junior': rows[0], 'senior': rows[1]}
-        return {'junior': rows[1], 'senior': rows[0]}
+        if len(rows) > 1:
+            if rows[0]['age_from'] < rows[1]['age_from']:
+                return {'junior': rows[0], 'senior': rows[1]}
+            return {'junior': rows[1], 'senior': rows[0]}
+        return {'junior': {}, 'senior': {}}
 
     def _remove_redirect(self, url):
         if self._redirect in url:
