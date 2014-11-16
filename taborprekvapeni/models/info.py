@@ -112,6 +112,9 @@ class BasicInfo(dict):
             return self._remove_redirect(url)
 
     def _parse_poster_url(self, poster_page_url):
+        if not poster_page_url:
+            return None
+
         resp = requests.get(poster_page_url)
         resp.raise_for_status()
         dom = html.fromstring(resp.content)

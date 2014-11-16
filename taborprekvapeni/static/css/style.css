@@ -27,3 +27,12 @@ body{font:normal 14px/1.8 Arial,'Open Sans',sans-serif,Arial,Helvetica;color:#00
  *	Form
  */
 :first-child{margin-top:0}
+
+
+.crossroad-camps .title {
+  width: 280px; height: 45px; line-height: 52px; padding-top: 0;
+}
+
+.crossroad-camps .title span {
+  display: inline-block; line-height: 32px; vertical-align: middle;
+}

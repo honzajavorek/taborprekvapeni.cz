@@ -32,10 +32,14 @@
             <li>
                 <a href="{{ info.junior.book_url }}" class="inner">
                     <p class="img">
-                        <img src="{{ url_for('image_proxy', url=info.junior.poster_url, resize='426x231') }}" alt="{{ info.junior.topic }}" width="426" height="231">
+                        {% if info.junior.poster_url %}
+                            <img src="{{ url_for('image_proxy', url=info.junior.poster_url, resize='426x231') }}" alt="{{ info.junior.topic }}" width="426" height="231">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='images/illust/generic-poster.png') }}" alt="{{ info.junior.topic }}" width="426" height="231">
+                        {% endif %}
                     </p>
                     <div class="info">
-                        <h2 class="title">{{ info.junior.topic }}</h2>
+                        <h2 class="title"><span>{{ info.junior.topic }}</span></h2>
                         <p class="entry">
                             <span class="btn btn-fat-arrow">
                                 <span>
@@ -53,10 +57,14 @@
             <li>
                 <a href="{{ info.senior.book_url }}" class="inner">
                     <p class="img">
-                        <img src="{{ url_for('image_proxy', url=info.senior.poster_url, resize='426x231') }}" alt="{{ info.senior.topic }}" width="426" height="231">
+                        {% if info.senior.poster_url %}
+                            <img src="{{ url_for('image_proxy', url=info.senior.poster_url, resize='426x231') }}" alt="{{ info.senior.topic }}" width="426" height="231">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='images/illust/generic-poster.png') }}" alt="{{ info.junior.topic }}" width="426" height="231">
+                        {% endif %}
                     </p>
                     <div class="info">
-                        <h2 class="title">{{ info.senior.topic }}</h2>
+                        <h2 class="title"><span>{{ info.senior.topic }}</span></h2>
                         <p class="entry">
                             <span class="btn btn-fat-arrow">
                                 <span>
