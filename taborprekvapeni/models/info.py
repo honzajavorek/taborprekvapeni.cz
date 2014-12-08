@@ -47,13 +47,19 @@ class BasicInfo(dict):
             starts_at, ends_at = self._parse_date(tr[0])
             age_from, age_to = self._parse_age(tr[1])
 
-            book_url = self._parse_url(tr[6])
-            camp_id = self._parse_id(book_url) if book_url else None
+            fb_url = self._parse_fb_url(tr[3])
+            if fb_url:
+                topic = self._parse_topic(tr[4])
+                price = self._parse_price(tr[5])
+                book_url = self._parse_url(tr[6])
+            else:
+                topic = self._parse_topic(tr[3])
+                price = self._parse_price(tr[4])
+                book_url = self._parse_url(tr[5])
 
-            topic = self._parse_topic(tr[4])
+            camp_id = self._parse_id(book_url) if book_url else None
             details_url = self._parse_details_url(dom, topic)
             poster_url = self._parse_poster_url(details_url)
-
             departure_url = self._create_url('odjezdy.php', camp_id)
 
             rows.append({
@@ -63,12 +69,12 @@ class BasicInfo(dict):
                 'starts_at': starts_at,
                 'ends_at': ends_at,
                 'topic': topic,
-                'fb_url': self._parse_url(tr[3]),
+                'fb_url': fb_url,
                 'details_url': details_url,
                 'book_url': book_url,
                 'poster_url': poster_url,
                 'departure_url': departure_url,
-                'price': self._parse_price(tr[5]),
+                'price': price,
             })
 
         if len(rows) > 1:
@@ -89,11 +95,11 @@ class BasicInfo(dict):
 
     def _parse_age(self, cell):
         # get two clusters of numbers
-        return map(int, re.findall(r'\d+', cell.text))
+        return map(int, re.findall(r'\d+', cell.text_content()))
 
     def _parse_date(self, cell):
         # get five clusters of numbers
-        results = map(int, re.findall(r'\d+', cell.text))
+        results = map(int, re.findall(r'\d+', cell.text_content()))
         start_day, start_month, end_day, end_month, year = results
 
         year = 2000 + year if year < 2000 else year
@@ -110,6 +116,11 @@ class BasicInfo(dict):
         else:
             url = a.get('href')  # get its href attribute
             return self._remove_redirect(url)
+
+    def _parse_fb_url(self, cell):
+        url = self._parse_url(cell)
+        if url and ('facebook.com/' in url or 'fb.me/' in url):
+            return url
 
     def _parse_poster_url(self, poster_page_url):
         if not poster_page_url:
@@ -136,7 +147,7 @@ class BasicInfo(dict):
 
     def _parse_price(self, cell):
         # get the first cluster of numbers
-        price = re.search(r'\d+', cell.text).group(0)
+        price = re.search(r'\d+', cell.text_content()).group(0)
         return int(price)
 
     def _parse_topic(self, cell):
