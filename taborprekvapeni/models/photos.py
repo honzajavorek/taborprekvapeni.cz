@@ -132,9 +132,15 @@ class PhotoAlbums(list):
             dom = html.fromstring(resp.content)
 
             # parse out album names
-            query = ("//ul[contains(@id, 'albumList')]"
-                     "//a[contains(@class, 'albumName')]")
-            albums = dom.xpath(query)
+            query = """
+                //ul[contains(@id, 'albumList')]
+                //a[
+                    not(ancestor::*[contains(@class, 'navigation')])
+                    and
+                    contains(@class, 'albumName')
+                ]
+            """
+            albums = dom.xpath(re.sub(r'\s+', ' ', query.strip()))
 
             # break infinite iteration
             if not albums:
