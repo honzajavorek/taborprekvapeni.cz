@@ -14,7 +14,6 @@ from .cache import Cache, DevelopmentCache
 
 # config
 DEBUG = bool(os.getenv('TABORPREKVAPENI_DEBUG', False))
-SENTRY_DSN = os.getenv('SENTRY_DSN')
 LOGGING = {'format': '[%(levelname)s] %(message)s', 'level': logging.DEBUG}
 MARKDOWN = {'extensions': ['headerid'], 'output': 'html5'}
 CACHE_DEFAULT_TIMEOUT = 604800  # one week
@@ -29,10 +28,6 @@ app.config.from_object(__name__)
 
 # logging
 logging.basicConfig(**app.config['LOGGING'])
-
-sentry = Sentry(app)
-handler = SentryHandler(sentry.client, level=logging.ERROR)
-logging.getLogger().addHandler(handler)
 
 requests_log = logging.getLogger('requests')
 requests_log.setLevel(logging.WARNING)
