@@ -35,4 +35,9 @@ body{font:normal 14px/1.8 Arial,'Open Sans',sans-serif,Arial,Helvetica;color:#00
 
 .crossroad-camps .title span {
   display: inline-block; line-height: 32px; vertical-align: middle;
+  font-size: 85%;
+}
+
+#footer .fb-box {
+  min-height: 234px;
 }
