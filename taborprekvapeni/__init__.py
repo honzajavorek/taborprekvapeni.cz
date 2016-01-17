@@ -6,8 +6,6 @@ import logging
 from os import path
 
 from flask import Flask
-from raven.contrib.flask import Sentry
-from raven.handlers.logging import SentryHandler
 
 from .cache import Cache, DevelopmentCache
 
