@@ -7,42 +7,38 @@
 {% block title %}Organizační informace{% endblock %}
 
 {% block lead %}
-    Základna tábora se nachází v rekreačním středisku uprostřed lesů v malebném údolí nedaleko Zvíkovského Podhradí. Děti bydlí v chatkách nebo stanech s podsadou. V hlavní budově mají k dispozici toalety a sprchy s teplou vodou. Jídlo připravujeme pro děti 5krát denně. V areálu je hřiště pro míčové hry i přírodní koupaliště.
+    Základna tábora se nachází na ranči uprostřed pastvin v malebném údolí řeky Mže, nedaleko zříceniny Volfštejn. Děti bydlí v chatkách. V hlavní budově mají k dispozici toalety a sprchy s teplou vodou. Jídlo připravujeme pro děti 5krát denně. V areálu je celoročně 15 koní, na kterých se děti učí jezdit.
 {% endblock %}
 
 {% block content %}
 {% filter markdown %}
-Kompletní **organizační informace** jsou k dispozici [na webu provozovatele](http://www.tabory.cz/lokalita/letni-tabory-cr/varvazov/). **Pokyny k odjezdu** včetně PDF ke stažení lze najít zvlášť na následujících odkazech:
+Kompletní **organizační informace** jsou k dispozici na webu provozovatele:
 
-- [{{ info.senior.topic }}]({{ info.senior.departure_url }}) ({{ info.senior.age_from }}&ndash;{{ info.senior.age_to }} let)
-- [{{ info.junior.topic }}]({{ info.junior.departure_url }}) ({{ info.junior.age_from }}&ndash;{{ info.junior.age_to }} let)
-
-## Místo konání
-
-Tábor se koná v Jižních Čechách, 7 km od Zvíkovského Podhradí. Detailní údaje o **RS Spolana Varvažov** jsou k dispozici [na webu provozovatele](http://www.tabory.cz/varvazov.html).
+- [Důležité informace](http://www.taboriste.cz/letni-tabory-2016/dulezite-informace-k-letnim-taborum/)
+- [Areál ranče](http://www.taboriste.cz/areal/)
 
 <div class="row">
     <div class="col col-h-1 grid-h">
         <a href="http://www.varvazov.wz.cz/foto.htm" target="_blank" class="thumbnail">
-            <img src="{{ url_for('image_proxy', url='http://www.varvazov.wz.cz/img00008.jpg', resize='600x400') }}" width="427">
+            <img src="{{ url_for('image_proxy', url='http://files.taboriste-cz.webnode.cz/200000171-0beb40ce4c/Bez%20n%C3%A1zvu-1.jpg', resize='600x400') }}" width="427">
         </a>
     </div>
     <div class="col col-h-2 grid-h">
         <a href="http://www.varvazov.wz.cz/foto.htm" target="_blank" class="thumbnail">
-            <img src="{{ url_for('image_proxy', url='http://www.varvazov.wz.cz/img00006.jpg', resize='600x400') }}" width="427">
+            <img src="{{ url_for('image_proxy', url='http://files.taboriste.cz/200002655-1ab861bb52-public/obrazek-horsemanship-s-olasem-119.jpg', resize='600x400') }}" width="427">
         </a>
     </div>
 </div>
 
 ### Adresa tábora
 
-Letní tábor **{{ info.senior.topic }} / {{ info.junior.topic }}**<br>
-RS Spolana Varvažov<br>
-397 01 Písek<br>
+Letní tábor **{{ info.senior.topic }}**<br>
+Ranč v údolí 1<br>
+349 58 Ostrovce<br>
 
 ### Doprava
 
-GPS: <code>49°25'58.253"N, 14°8'1.301"E</code><br>
-<a href="http://mapy.cz/s/6bOY" target="_blank">mapa</a>, <a href="http://www.varvazov.wz.cz/cesta.htm" target="_blank">popis cesty</a>
+GPS: <code>49°47'20.598"N, 12°51'47.641"E</code><br>
+<a href="https://mapy.cz/s/pRIn" target="_blank">mapa</a>, <a href="http://www.taboriste.cz/letni-tabory-2016/dulezite-informace-k-letnim-taborum/" target="_blank">popis cesty</a>
 {% endfilter %}
 {% endblock %}
