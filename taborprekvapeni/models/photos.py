@@ -136,7 +136,7 @@ class PhotoAlbums(list):
 
             # parse out album names
             query = """
-                //ul[contains(@id, 'albumList')]
+                //div[contains(@class, 'albumList')]
                 //a[
                     not(ancestor::*[contains(@class, 'navigation')])
                     and
@@ -147,6 +147,7 @@ class PhotoAlbums(list):
 
             # break infinite iteration
             if not albums:
+                print('prd')
                 break
 
             # else, filter album names to camp-related only
@@ -184,12 +185,12 @@ class PhotoAlbums(list):
         return album.get('href')
 
     def _parse_image_url(self, album):
-        query = "./ancestor::li[1]//*[contains(@class, 'photo')]//img"
+        query = "./ancestor::*[contains(@class, 'albumItem')]//*[contains(@class, 'photo')]//img"
         thumb = album.xpath(query)[0].get('src')
         return thumb.replace('/thumb/', '/images/')
 
     def _parse_count(self, album):
-        query = "./ancestor::li[1]//*[contains(@style, 'mediaCount')]/text()"
+        query = "./ancestor::*[contains(@class, 'albumItem')]//*[contains(@style, 'mediaCount')]/text()"
         count_text = album.xpath(query)[0]
         count = int(re.match('\d+', count_text).group(0))
         return count
