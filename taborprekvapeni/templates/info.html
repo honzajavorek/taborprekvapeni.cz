@@ -7,25 +7,25 @@
 {% block title %}Organizační informace{% endblock %}
 
 {% block lead %}
-    Základna tábora se nachází na ranči uprostřed pastvin v malebném údolí řeky Mže, nedaleko zříceniny Volfštejn. Děti bydlí v chatkách. V hlavní budově mají k dispozici toalety a sprchy s teplou vodou. Jídlo připravujeme pro děti 5krát denně. V areálu je celoročně 15 koní, na kterých se děti učí jezdit.
+    Tábor je umístěný v Rekreačním středisku Babočka v krásné krajině Lužického podhůří v těsném sousedství Českého Švýcarska. Děti bydlí v chatkách. V hlavní budově mají k dispozici toalety a sprchy s teplou vodou. Jídlo připravujeme pro děti 4krát denně.
 {% endblock %}
 
 {% block content %}
 {% filter markdown %}
 Kompletní **organizační informace** jsou k dispozici na webu provozovatele:
 
-- [Důležité informace](http://www.taboriste.cz/letni-tabory-2016/dulezite-informace-k-letnim-taborum/)
-- [Areál ranče](http://www.taboriste.cz/areal/)
+- [Důležité informace](http://www.taborbezhranic.cz/index.php?stranka=tabor)
+- [RS Babočka](http://www.rsbabocka.cz/)
 
 <div class="row">
     <div class="col col-h-1 grid-h">
         <a href="http://www.varvazov.wz.cz/foto.htm" target="_blank" class="thumbnail">
-            <img src="{{ url_for('image_proxy', url='http://files.taboriste-cz.webnode.cz/200000171-0beb40ce4c/Bez%20n%C3%A1zvu-1.jpg', resize='600x400') }}" width="427">
+            <img src="{{ url_for('image_proxy', url='http://www.taborbezhranic.cz/img/areal/01zakladna.jpg', resize='600x380') }}" width="427">
         </a>
     </div>
     <div class="col col-h-2 grid-h">
         <a href="http://www.varvazov.wz.cz/foto.htm" target="_blank" class="thumbnail">
-            <img src="{{ url_for('image_proxy', url='http://files.taboriste.cz/200002655-1ab861bb52-public/obrazek-horsemanship-s-olasem-119.jpg', resize='600x400') }}" width="427">
+            <img src="{{ url_for('image_proxy', url='http://www.taborbezhranic.cz/img/areal/04chatky.jpg', resize='600x380') }}" width="427">
         </a>
     </div>
 </div>
@@ -33,12 +33,13 @@ Kompletní **organizační informace** jsou k dispozici na webu provozovatele:
 ### Adresa tábora
 
 Letní tábor **{{ info.senior.topic }}**<br>
-Ranč v údolí 1<br>
-349 58 Ostrovce<br>
+RS Babočka<br>
+Krásné pole 29<br>
+407 44 Chřibská
 
 ### Doprava
 
-GPS: <code>49°47'20.598"N, 12°51'47.641"E</code><br>
-<a href="https://mapy.cz/s/pRIn" target="_blank">mapa</a>, <a href="http://www.taboriste.cz/letni-tabory-2016/dulezite-informace-k-letnim-taborum/" target="_blank">popis cesty</a>
+GPS: <code>50°50'58.184"N, 14°30'16.791"E</code><br>
+<a href="https://mapy.cz/s/ODdi" target="_blank">mapa</a>
 {% endfilter %}
 {% endblock %}
