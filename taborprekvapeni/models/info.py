@@ -18,7 +18,7 @@ class BasicInfo(dict):
             'topic': u'Atlantida - ztracená země',
             'book_url': 'http://www.taborbezhranic.cz/index.php?stranka=kontakty',
             'poster_url': 'http://img9.rajce.idnes.cz/d0902/8/8487/8487696_736315498cf25b645868230322dca902/images/DSC_0862.jpg?ver=2',
-            'price': 5400,
+            'price': 5190,
         }
         self['senior'] = {
             'age_from': 10,
@@ -29,5 +29,5 @@ class BasicInfo(dict):
             'book_url': 'http://www.taborbezhranic.cz/index.php?stranka=kontakty',
             'poster_url': 'http://img5.rajce.idnes.cz/d0508/8/8500/8500812_6838f7e81857603deb5e43210379fe96/images/tabor20130839.jpg',
             # http://img5.rajce.idnes.cz/d0508/8/8500/8500812_6838f7e81857603deb5e43210379fe96/images/tabor20130915.jpg?ver=2
-            'price': 5400,
+            'price': 5190,
         }
