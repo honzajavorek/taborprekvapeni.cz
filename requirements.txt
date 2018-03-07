@@ -2,7 +2,7 @@ gunicorn==18.0
 gevent==1.1rc3
 flask==0.10.1
 flask-markdown==0.3
-requests==2.2.0
+requests==2.18.4
 lxml==3.2.5
 pymongo==2.6.3
 times==0.6.2
