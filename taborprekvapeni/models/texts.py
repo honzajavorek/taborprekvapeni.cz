@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 import os
 import re
 
@@ -14,8 +11,8 @@ class TextParser(object):
     }
 
     def parse(self, filename):
-        with open(filename) as f:
-            text = f.read().strip().decode('utf-8')
+        with open(filename, encoding='utf-8') as f:
+            text = f.read().strip()
 
         # find title and extract it
         title = None
@@ -42,7 +39,7 @@ class TextParser(object):
         return meta
 
 
-class HistoryText(unicode):
+class HistoryText(str):
 
     _dirname = os.path.join(os.path.dirname(__file__), 'history')
 
@@ -51,7 +48,7 @@ class HistoryText(unicode):
         path = os.path.join(cls._dirname, str(year) + '.md')
         text, meta = TextParser().parse(path)
 
-        obj = unicode.__new__(cls, text)
+        obj = str.__new__(cls, text)
 
         # set properties
         obj.title = meta['title']
@@ -69,7 +66,7 @@ class HistoryText(unicode):
         return sorted(texts, key=lambda t: t.year, reverse=True)
 
 
-class TeamMemberText(unicode):
+class TeamMemberText(str):
 
     _dirname = os.path.join(os.path.dirname(__file__), 'team')
 
@@ -81,7 +78,7 @@ class TeamMemberText(unicode):
         path = os.path.join(cls._dirname, basename)
         text, meta = TextParser().parse(path)
 
-        obj = unicode.__new__(cls, text)
+        obj = str.__new__(cls, text)
 
         # set properties
         obj.order = int(order)
@@ -108,5 +105,7 @@ class TeamMemberText(unicode):
             if re.match(r'\d', basename):
                 text = cls(basename)
                 texts.append(text)
-        key_order = lambda t: t.order
+
+        def key_order(t):
+            return t.order
         return sorted(texts, key=key_order)

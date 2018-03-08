@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 from .info import BasicInfo
 from .texts import HistoryText, TeamMemberText
 from .photos import Photo, PhotoAlbums

@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-
-
 import os
 from hashlib import sha1
-from StringIO import StringIO
+from io import BytesIO
 from collections import OrderedDict
 
 import times
@@ -124,7 +121,7 @@ def image_proxy():
     photo = Photo(url, crop=crop, resize=resize)
 
     # build response
-    response = send_file(StringIO(photo), mimetype='image/jpeg')
+    response = send_file(BytesIO(photo), mimetype='image/jpeg')
     response.set_etag(sha1(photo).hexdigest())
     response.make_conditional(request)
     return response

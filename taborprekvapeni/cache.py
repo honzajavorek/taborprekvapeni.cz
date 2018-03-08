@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 from hashlib import sha1
 from functools import wraps
 
@@ -33,7 +30,7 @@ class Cache(FileSystemCache):
                 rv = f(*args, **kwargs)
                 response = make_response(rv)
 
-                if isinstance(rv, unicode):  # ensure HTTP 304 for strings
+                if isinstance(rv, str):  # ensure HTTP 304 for strings
                     response.set_etag(sha1(rv.encode('utf-8')).hexdigest())
 
                 response.freeze()

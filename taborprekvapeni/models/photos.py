@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
-
-
 import re
-import urllib
+import urllib.parse
 import itertools
-from StringIO import StringIO
+from io import BytesIO
 
 import requests
 from lxml import html
@@ -54,15 +51,15 @@ class ImageEditor(object):
             (old_w > old_h and width <= height)
         )
         if keep_height:
-            size = (old_w * height / old_h, height)
+            size = (old_w * height // old_h, height)
         else:
-            size = (width, old_h * width / old_w)
+            size = (width, old_h * width // old_w)
 
         image = image.resize(size, Image.ANTIALIAS)
 
         # crop the rest, centered
-        left = abs(size[0] - width) / 2
-        top = abs(size[1] - height) / 2
+        left = abs(size[0] - width) // 2
+        top = abs(size[1] - height) // 2
 
         box = (left, top, left + width, top + height)
         self.image = image.crop(box)
@@ -74,7 +71,7 @@ class ImageEditor(object):
 
     @property
     def stream(self):
-        stream = StringIO()
+        stream = BytesIO()
         self.image.save(stream, 'JPEG', quality=100)
         stream.seek(0)
         return stream
@@ -84,12 +81,12 @@ class ImageEditor(object):
         return self.stream.read()
 
 
-class Photo(str):
+class Photo(bytes):
 
     def __new__(cls, url, crop=None, resize=None):
         resp = requests.get(url, stream=True)
         resp.raise_for_status()
-        stream = StringIO(resp.content)
+        stream = BytesIO(resp.content)
 
         image = Image.open(stream)
         editor = ImageEditor(image)
@@ -101,7 +98,7 @@ class Photo(str):
         if crop or resize:
             editor.sharpen()
 
-        return str.__new__(cls, editor.bytes)
+        return bytes.__new__(cls, editor.bytes)
 
 
 class PhotoAlbums(list):
@@ -114,20 +111,21 @@ class PhotoAlbums(list):
         self.extend(all_albums)
 
     def _regroup_sorted(self, all_albums):
-        key_year = lambda a: a['year']
-        key_title = lambda a: a['title'].lower()
-
         # sort it by year (reverse = descendant by time)
+        def key_year(a):
+            return a['year']
         all_albums = sorted(all_albums, key=key_year, reverse=True)
 
         # regroup it by year, sort every album set by title
+        def key_title(a):
+            return a['title'].lower()
         for year, albums in itertools.groupby(all_albums, key=key_year):
             yield year, sorted(albums, key=key_title)
 
     def _generate_albums(self, url):
         for page in itertools.count():
             # fetch page URL
-            params = urllib.urlencode({'page': page})
+            params = urllib.parse.urlencode({'page': page})
             page_url = '?'.join([url, params])
 
             resp = requests.get(page_url)
