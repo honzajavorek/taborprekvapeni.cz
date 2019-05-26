@@ -1,6 +1,6 @@
 from .info import BasicInfo
-from .texts import HistoryText, TeamMemberText
-from .photos import Photo, PhotoAlbums
+from .texts import TeamMemberText
+from .photos import Photo
 
 
-__all__ = (BasicInfo, TeamMemberText, HistoryText, PhotoAlbums, Photo)
+__all__ = (BasicInfo, TeamMemberText, Photo)

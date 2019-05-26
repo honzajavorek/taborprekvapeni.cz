@@ -41,3 +41,18 @@ body{font:normal 14px/1.8 Arial,'Open Sans',sans-serif,Arial,Helvetica;color:#00
 #footer .fb-box {
   min-height: 234px;
 }
+
+.history-detail-gallery .crossroad-gallery ul > * {
+  width: 25%;
+}
+
+.history-detail-gallery .crossroad-gallery .inner {
+  background: url('../images/placeholder.jpg') no-repeat center;
+  background-size: cover;
+  min-height: auto;
+  padding: 20px;
+}
+
+.history-detail-gallery .crossroad-gallery .title {
+  font-size: 200%;
+}

@@ -11,7 +11,7 @@ from flask import (render_template, abort, request, send_from_directory,
                    send_file)
 
 from . import app, cache
-from .models import BasicInfo, TeamMemberText, HistoryText, PhotoAlbums, Photo
+from .models import BasicInfo, TeamMemberText, Photo
 
 
 @app.context_processor
@@ -83,6 +83,13 @@ def team(slug=None):
                            all_texts=all_texts)
 
 
+def has_content(history_detail):
+    return (
+        history_detail.get('name')
+        and history_detail.get('place')
+    )
+
+
 @app.route('/historie-fotky/<int:year>')
 @app.route('/historie-fotky')
 @cache.cached_view()
@@ -92,6 +99,7 @@ def history(year=None):
         dict(year=yml_path.stem, **yaml.safe_load(yml_path.read_text()))
         for yml_path in path.glob('**/*.yml')
     ], key=itemgetter('year'), reverse=True)
+    history = list(filter(has_content, history))
 
     if not year:
         # index page with listing
@@ -103,18 +111,7 @@ def history(year=None):
     except IOError:
         abort(404)
 
-    has_content = any([
-        # has non-empty text
-        history_detail.get('text'),
-        # has essential attributes
-        (
-            history_detail.get('title')
-            and history_detail.get('place')
-            and history_detail.get('albums')
-        ),
-    ])
-
-    if not has_content:
+    if not has_content(history_detail):
         abort(404)
     return render_template('history_detail.html', year=year, **history_detail)
 

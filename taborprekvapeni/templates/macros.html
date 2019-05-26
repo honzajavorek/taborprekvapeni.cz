@@ -38,12 +38,12 @@
 {% macro history_menu(texts) %}
     <div class="crossroad-gallery">
         <ul class="reset">
-            {% for text in texts %}
+            {% for history_detail in history %}
                 <li>
                     {{ volume_item(
-                        text.year,
-                        text.place,
-                        text.title
+                        history_detail.year,
+                        history_detail.place,
+                        history_detail.name
                     ) }}
                 </li>
             {% endfor %}
@@ -52,25 +52,13 @@
 {% endmacro %}
 
 
-{% macro album_image(album) %}
-    <img src="{{ url_for('image_proxy', url=album.image_url, resize='250x250') }}" width="250" height="250">
-{% endmacro %}
-
-
-{% macro album_gallery(albums) %}
+{% macro photo_gallery(photos) %}
     <div class="crossroad-gallery">
         <ul class="reset">
-            {% for album in albums %}
+            {% for photo in photos %}
                 <li>
-                    <a href="{{ album.url }}" class="inner" target="_blank">
-                        {{ album_image(album) }}
-                        <h3 class="title">
-                            {% if album.count == 1 %}
-                                1 fotka
-                            {% else %}
-                                {{ album.count }} fotek
-                            {% endif %}
-                        </h3>
+                    <a href="{{ photo }}" class="inner" target="_blank">
+                        <h3 class="title">{{ loop.index }}</h3>
                     </a>
                 </li>
             {% endfor %}
