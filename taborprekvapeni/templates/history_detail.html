@@ -4,11 +4,11 @@
 
 {% block description -%}
     Zápisek s fotogalerií k {{ (year + 1) - 1997 }}. ročníku Tábora plného překvapení. Název celotáborové hry byl
-    &#34;{{ text.title|split(' · ')|join('" a malí měli "') }}&#34;.
+    &#34;{{ title|split(' · ')|join('" a malí měli "') }}&#34;.
 {%- endblock %}
 
 {% block site_title %}
-    Historie a fotky: {{ text.title|split(' · ')|join(', ') }} · {{ text.place }} {{ year }}
+    Historie a fotky: {{ title|split(' · ')|join(', ') }} · {{ place }} {{ year }}
 {% endblock %}
 
 {% block title %}
@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block lead %}
-    {{ text.title|split('·')|join('&amp;')|safe }}, {{ text.place }} {{ year }}
+    {{ title|split('·')|join('&amp;')|safe }}, {{ place }} {{ year }}
 {% endblock %}
 
 {% block image %}{% if text %}{{ macros.volume_image(year, class='r') }}{% endif %}{% endblock %}

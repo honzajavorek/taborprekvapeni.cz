@@ -104,7 +104,7 @@ class Photo(bytes):
 class PhotoAlbums(list):
 
     _url = 'http://hlavas.rajce.idnes.cz/'
-    _camp_re = re.compile(u't[áa]bor\D{0,3}(\d{4}|\d{2})', re.I)
+    _camp_re = re.compile(r'(t[áa]bor\D{0,3}(\d{4}|\d{2})|^[Aa]tlanti)', re.I)
 
     def __init__(self):
         all_albums = self._regroup_sorted(self._generate_albums(self._url))
@@ -145,7 +145,6 @@ class PhotoAlbums(list):
 
             # break infinite iteration
             if not albums:
-                print('prd')
                 break
 
             # else, filter album names to camp-related only

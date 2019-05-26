@@ -2,8 +2,11 @@ import os
 from hashlib import sha1
 from io import BytesIO
 from collections import OrderedDict
+from pathlib import Path
+from operator import itemgetter
 
 import times
+import yaml
 from flask import (render_template, abort, request, send_from_directory,
                    send_file)
 
@@ -84,25 +87,36 @@ def team(slug=None):
 @app.route('/historie-fotky')
 @cache.cached_view()
 def history(year=None):
-    all_albums = OrderedDict(cache.cached_call('photo-albums', PhotoAlbums))
-    all_texts = HistoryText.all()
+    path = Path(__file__).parent / 'models' / 'history'
+    history = sorted([
+        dict(year=yml_path.stem, **yaml.safe_load(yml_path.read_text()))
+        for yml_path in path.glob('**/*.yml')
+    ], key=itemgetter('year'), reverse=True)
 
     if not year:
         # index page with listing
-        return render_template('history.html', all_texts=all_texts)
+        return render_template('history.html', history=history)
 
-    text = HistoryText(year)
-    albums = all_albums.get(year, [])
+    try:
+        yml_path = path / (str(year) + '.yml')
+        history_detail = yaml.safe_load(yml_path.read_text())
+    except IOError:
+        abort(404)
 
     has_content = any([
-        text,  # has non-empty text
-        text.title and text.place and albums,  # has essential attributes
+        # has non-empty text
+        history_detail.get('text'),
+        # has essential attributes
+        (
+            history_detail.get('title')
+            and history_detail.get('place')
+            and history_detail.get('albums')
+        ),
     ])
 
     if not has_content:
         abort(404)
-    return render_template('history_detail.html', year=year, text=text,
-                           all_texts=all_texts, albums=albums)
+    return render_template('history_detail.html', year=year, **history_detail)
 
 
 @app.route('/image')

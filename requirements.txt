@@ -6,3 +6,4 @@ lxml==4.1.1
 times==0.7
 pillow==5.0.0
 unidecode==1.0.22
+pyyaml==5.1
