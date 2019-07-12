@@ -13,7 +13,6 @@ LOGGING = {'format': '[%(levelname)s] %(message)s', 'level': logging.DEBUG}
 MARKDOWN = {'extensions': ['toc'], 'output': 'html5'}
 CACHE_DEFAULT_TIMEOUT = 604800  # one week
 CACHE_DIR = path.realpath(path.join(path.dirname(__file__), '..', 'tmp'))
-GA_CODE = 'UA-1316071-16'
 
 
 # application setup
