@@ -41,5 +41,4 @@ Gunicorn je server, který spustí Python aplikaci a vystaví ji ven. Je to tot�
 
 - Přístup na GitHub má @honzajavorek a @brnkamatej
 - Přístup na Heroku má @honzajavorek a @brnkamatej
-- Přístup na Google Analytics má @honzajavorek
 - Přístup na taborprekvapeni.cz doménu má @honzajavorek
