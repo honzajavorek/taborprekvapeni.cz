@@ -17,7 +17,6 @@ from .models import BasicInfo, TeamMemberText, Photo
 @app.context_processor
 def inject_config():
     return {
-        'ga_code': app.config['GA_CODE'],
         'debug': app.debug,
     }
 
